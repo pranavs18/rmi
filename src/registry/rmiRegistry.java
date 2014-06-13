@@ -1,5 +1,20 @@
 package registry;
+import generics.*;
 
-public class rmiRegistry {
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class rmiRegistry extends Thread implements Remote {
+	
+	
+	private String bindName;
+	private int port;
+	//Constructor to instantiate rmiRegistry 
+	public rmiRegistry(String bindName, int port){
+		this.bindName = bindName;
+		this.port = port;
+	}
+	
+	
 	
 }
