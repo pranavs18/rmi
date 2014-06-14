@@ -15,6 +15,14 @@ public class rmiRegistry extends Thread implements myRemoteInterface {
 		this.port = port;
 	}
 	
-	
+	void bind(String name, Remote obj) throws  AlreadyBoundException, RemoteException{
+		
+	}
+    void unbind(String name) throws RemoteException, NotBoundException{
+    	
+    }
+    void rebind(String name, Remote obj) throws RemoteException{
+    	
+    }
 	
 }
