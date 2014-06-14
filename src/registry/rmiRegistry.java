@@ -4,7 +4,7 @@ import generics.*;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class rmiRegistry extends Thread implements myRemoteInterface {
+public class rmiRegistry implements RegistryInterface {
 	
 	
 	private String bindName;
