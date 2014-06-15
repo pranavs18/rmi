@@ -4,7 +4,7 @@ import generics.myRemoteInterface;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class rmiRegistry implements RegistryInterface {
+public class Registry implements RegistryInterface {
 	
 	
 	private String host;
@@ -12,7 +12,7 @@ public class rmiRegistry implements RegistryInterface {
 	ConcurrentHashMap<String, RemoteObjectRef> regMap = new ConcurrentHashMap<String,RemoteObjectRef>();
 	
 	//Constructor to instantiate rmiRegistry 
-	public rmiRegistry(String ipAddress, int port){
+	public Registry(String ipAddress, int port){
 		this.setHost(ipAddress);
 		this.setPort(port);
 	}
