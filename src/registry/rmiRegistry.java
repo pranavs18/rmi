@@ -1,5 +1,5 @@
 package registry;
-import generics.*;
+import generics.myRemoteInterface;
 
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,19 +9,29 @@ public class rmiRegistry implements RegistryInterface {
 	
 	private String host;
 	private int port;
+	ConcurrentHashMap<String, RemoteObjectRef> regMap = new ConcurrentHashMap<String,RemoteObjectRef>();
+	
 	//Constructor to instantiate rmiRegistry 
 	public rmiRegistry(String ipAddress, int port){
 		this.setHost(ipAddress);
 		this.setPort(port);
 	}
 	
-	void bind(String name, RemoteObjectRef obj) throws  AlreadyBoundException, RemoteException{
-		
+	public void bind(String name, RemoteObjectRef obj) throws  AlreadyBoundException, RemoteException{
+		if(!regMap.containsKey(name)){
+			regMap.put(name, obj);
+			
+		}
+		else{
+			throw new AlreadyBoundException("This name is already bound");
+		}
 	}
-    void unbind(String name) throws RemoteException, NotBoundException{
+	
+    public void unbind(String name) throws RemoteException, NotBoundException{
     	
     }
-    void rebind(String name, RemoteObjectRef obj) throws RemoteException{
+    
+    public void rebind(String name, RemoteObjectRef obj) throws RemoteException{
     	
     }
 
