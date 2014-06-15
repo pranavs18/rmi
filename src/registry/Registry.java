@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -27,21 +28,28 @@ public class Registry implements RegistryInterface, Runnable {
 	
 	public void bind(String name, RemoteObjectRef obj) throws  AlreadyBoundException, RemoteException{
 		if(!regMap.containsKey(name)){
-		//	RemoteObjectRef ROR = new RemoteObjectRef(host,port);
-			//regMap.put(name, );
-			
+			RemoteObjectRef ROR = new RemoteObjectRef(host,port,name,obj.class_name);
+			regMap.put(name, ROR);			
 		}
 		else{
-			throw new AlreadyBoundException("This name is already bound");
+			throw new AlreadyBoundException("This name - " + name+ " is already bound");
 		}
 	}
 	
     public void unbind(String name) throws RemoteException, NotBoundException{
-    	
+    	if(regMap.containsKey(name)){
+			
+			regMap.remove(name);			
+		}
+    	else{
+    		throw new NotBoundException("This name is not binded");
+    	}
     }
     
     public void rebind(String name, RemoteObjectRef obj) throws RemoteException{
     	
+    	RemoteObjectRef ROR = new RemoteObjectRef(host,port,name,obj.class_name);
+		regMap.put(name, ROR);	
     }
 
 	public int getPort() {
@@ -67,7 +75,8 @@ public class Registry implements RegistryInterface, Runnable {
 			try {
 				try {
 					startRegistry(host, registry_port);
-				} catch (ClassNotFoundException e) {
+					
+				} catch (ClassNotFoundException | InterruptedException e) {
 					e.printStackTrace();
 				}
 			} catch (IOException e) {
@@ -76,20 +85,21 @@ public class Registry implements RegistryInterface, Runnable {
    
 	}
 	
-private void startRegistry(String host, int registryPort) throws IOException, ClassNotFoundException {
+private void startRegistry(String host, int registryPort) throws IOException, ClassNotFoundException, InterruptedException {
 		
 	@SuppressWarnings("resource")
 	ServerSocket registryServer = new ServerSocket(registryPort);
 	while(true){
-		
+		System.out.println("Listening on port 1099 ...");
+		Thread.sleep(1000);
 		Socket registrySocket = registryServer.accept();	
-		ObjectInputStream regSocketInput = new ObjectInputStream(registrySocket.getInputStream());
+	    ObjectInputStream regSocketInput = new ObjectInputStream(registrySocket.getInputStream());
 		regSocketInput.readObject();
 		
 	}
 }
 
-public static void main(String[] args){
+public static void main(String[] args) throws UnknownHostException{
 	
 	    	
 		if(args.length != 1){
