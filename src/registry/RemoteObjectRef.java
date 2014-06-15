@@ -20,7 +20,9 @@ public class RemoteObjectRef
     Object localise()
     {
     	try{
-    	return Class.forName(class_name).newInstance();
+    		Class<?> c = Class.forName(class_name);
+    	    Object o = c.newInstance();
+    	    return o;
     	}
     	catch (Exception e){}
     	return null;

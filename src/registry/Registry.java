@@ -1,10 +1,11 @@
 package registry;
 import generics.myRemoteInterface;
 
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Registry implements RegistryInterface {
+public class Registry implements RegistryInterface, Runnable {
 	
 	
 	private String host;
@@ -49,6 +50,24 @@ public class Registry implements RegistryInterface {
 
 	public void setHost(String host) {
 		this.host = host;
+	}
+
+	@Override
+	public void run() {
+		while (true) {
+                
+                 System.out.println("Accept incoming connections");
+                 try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+               
+
+              
+        
+		
+	           }
 	}
 	
 }
