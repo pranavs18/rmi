@@ -1,8 +1,14 @@
-package registry;
+package Server;
 
 import generics.Communication;
 
 import java.io.Serializable;
+
+import registry.AlreadyBoundException;
+import registry.NotBoundException;
+import registry.RegistryInterface;
+import registry.RemoteException;
+import registry.RemoteObjectRef;
 
 public class Registry_stub implements RegistryInterface,Serializable {
 

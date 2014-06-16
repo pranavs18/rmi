@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Registry implements RegistryInterface, Runnable {
 	
 	public final static int registry_port = 1099;
-	private static String host;
+	private String host;
 	private int port;
 	ConcurrentHashMap<String, RemoteObjectRef> regMap;
 
@@ -26,6 +26,11 @@ public class Registry implements RegistryInterface, Runnable {
 		regMap = new ConcurrentHashMap<String, RemoteObjectRef>();
 	}
 	
+	private void setHost(String ipAddress) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public void bind(String name, RemoteObjectRef obj) throws  AlreadyBoundException, RemoteException{
 		if(!regMap.containsKey(name)){
 			RemoteObjectRef ROR = new RemoteObjectRef(host,port,name,obj.class_name);
@@ -36,14 +41,18 @@ public class Registry implements RegistryInterface, Runnable {
 		}
 	}
 	
-    public void unbind(String name) throws RemoteException, NotBoundException{
+       public String unbind(String name) throws RemoteException, NotBoundException{
+    	String unboundKey = null;
+    	
     	if(regMap.containsKey(name)){
 			
+    		unboundKey = regMap.get(name).getkeyName();
 			regMap.remove(name);			
 		}
     	else{
     		throw new NotBoundException("This name is not binded");
     	}
+    return unboundKey;
     }
     
     public void rebind(String name, RemoteObjectRef obj) throws RemoteException{
@@ -64,11 +73,8 @@ public class Registry implements RegistryInterface, Runnable {
 		return host;
 	}
 
-	public void setHost(String host) {
-		this.host = host;
-	}
-
 	
+
 	@Override
 	public void run() {
                 
@@ -93,8 +99,15 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 		System.out.println("Listening on port 1099 ...");
 		Thread.sleep(1000);
 		Socket registrySocket = registryServer.accept();	
-	    ObjectInputStream regSocketInput = new ObjectInputStream(registrySocket.getInputStream());
-		regSocketInput.readObject();
+
+		ObjectInputStream regSocketInput = new ObjectInputStream(registrySocket.getInputStream());
+		Registry_stub obj = (Registry_stub)regSocketInput.readObject();
+		System.out.println(obj.getHost());
+		System.out.println(obj.getMethodName());
+		System.out.println(obj.getBindName());
+		System.out.println(obj.getRemoteObjectSent().getClass_Name());
+		
+
 		
 	}
 }
@@ -108,7 +121,6 @@ public static void main(String[] args) throws UnknownHostException{
 		}
 		
 		String Registry_IP = args[0]; 
-		host = Registry_IP;
 		Registry reg = new Registry(Registry_IP,registry_port);	
 		System.out.println("Starting registry on host " + Registry_IP + " and port " + registry_port);
 		new Thread(reg).start();

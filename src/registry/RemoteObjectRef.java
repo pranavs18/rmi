@@ -1,6 +1,10 @@
 package registry;
 
-public class RemoteObjectRef
+import java.io.Serializable;
+
+import generics.myRemoteInterface;
+
+public class RemoteObjectRef implements myRemoteInterface,Serializable
 {
     String IP_adr;
     int Port;
