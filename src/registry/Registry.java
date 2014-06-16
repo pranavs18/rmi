@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -82,7 +84,7 @@ public class Registry implements RegistryInterface, Runnable {
 				try {
 					startRegistry(host, registry_port);
 					
-				} catch (ClassNotFoundException | InterruptedException e) {
+				} catch (ClassNotFoundException | InterruptedException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					e.printStackTrace();
 				}
 			} catch (IOException e) {
@@ -91,7 +93,7 @@ public class Registry implements RegistryInterface, Runnable {
    
 	}
 	
-private void startRegistry(String host, int registryPort) throws IOException, ClassNotFoundException, InterruptedException {
+private void startRegistry(String host, int registryPort) throws IOException, ClassNotFoundException, InterruptedException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
 	@SuppressWarnings("resource")
 	ServerSocket registryServer = new ServerSocket(registryPort);
@@ -102,11 +104,21 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 
 		ObjectInputStream regSocketInput = new ObjectInputStream(registrySocket.getInputStream());
 		Registry_stub obj = (Registry_stub)regSocketInput.readObject();
-		System.out.println(obj.getHost());
+		System.out.println(obj.getRemoteObjectSent().getIP_adr());
 		System.out.println(obj.getMethodName());
-		System.out.println(obj.getBindName());
+		System.out.println(obj.getRemoteObjectSent().getkeyName());
 		System.out.println(obj.getRemoteObjectSent().getClass_Name());
+		Object[] methodParams = new Object[]{};
 		
+		Registry r = new Registry(obj.getRemoteObjectSent().getIP_adr(),obj.getRemoteObjectSent().getPort());
+		//Class<?> noParmeter[] = {};
+        Method suspending = r.getClass().getDeclaredMethod(obj.getMethodName(), new Class[] {} );
+        suspending.setAccessible(true);
+        if(methodParams.length == 0)
+        	suspending.invoke(r, (Object[])null);
+        else{
+        	suspending.invoke(r, methodParams);
+        }
 
 		
 	}
