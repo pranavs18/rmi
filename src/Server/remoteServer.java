@@ -15,7 +15,7 @@ public class remoteServer{
 		
 		try {
 			Naming.bind("//127.0.0.1:1099/firstObject", test);
-			Naming.bind("//127.0.0.1:1099/firstObject", test);
+			Naming.rebind("//127.0.0.1:1099/firstObject", test);
 		} catch (AlreadyBoundException | RemoteException e) {
 			
 			e.printStackTrace();

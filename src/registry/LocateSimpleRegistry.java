@@ -35,6 +35,7 @@ public class LocateSimpleRegistry
 		    System.out.println("somebody is there but not a  registry!");
 		    return null;
 		}
+	    
 	}
 	catch (Exception e) 
 	    { 

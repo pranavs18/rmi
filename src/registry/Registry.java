@@ -1,18 +1,12 @@
 package registry;
 import generics.myRemoteInterface;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Registry implements RegistryInterface, Runnable {
@@ -35,7 +29,7 @@ public class Registry implements RegistryInterface, Runnable {
 	}
 
 	public void bind(String name, RemoteObjectRef obj) throws  AlreadyBoundException, RemoteException{
-		
+		System.out.println("Binding method Invoked...");
 		if(!regMap.containsKey(name)){
 			
 			regMap.put(name, obj);	
@@ -46,7 +40,7 @@ public class Registry implements RegistryInterface, Runnable {
 		}
 	}
 	
-       public String unbind(String name) throws RemoteException, NotBoundException{
+    public String unbind(String name) throws RemoteException, NotBoundException{
     	String unboundKey = null;
     	
     	if(regMap.containsKey(name)){
@@ -62,9 +56,25 @@ public class Registry implements RegistryInterface, Runnable {
     }
     
     public void rebind(String name, RemoteObjectRef obj) throws RemoteException{
-    	
-    	
-		regMap.put(name, obj);	
+   
+        if(regMap.containsKey(name)){
+           if(regMap.get(name).getCallee().equals("bind"))	{
+        	   try {
+				throw new AlreadyBoundException("This name - " + name+ " is already bound...cannot rebind");
+			} catch (AlreadyBoundException e) {
+				
+			   }
+           }
+           else{
+        	   System.out.println("Re-binding method Invoked...");
+        	   regMap.put(name, obj);
+           }
+        }
+        else{
+        	System.out.println("Re-binding method Invoked...");
+     	    regMap.put(name, obj);
+        }
+        	
     }
 
 	public int getPort() {
