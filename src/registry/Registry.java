@@ -12,6 +12,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Registry implements RegistryInterface, Runnable {
@@ -19,25 +20,26 @@ public class Registry implements RegistryInterface, Runnable {
 	public final static int registry_port = 1099;
 	private String host;
 	private int port;
-	private static ConcurrentHashMap<String, RemoteObjectRef> regMap;
+	private static ConcurrentHashMap<String, RemoteObjectRef> regMap= new ConcurrentHashMap<String, RemoteObjectRef>();
 
 	//Constructor to instantiate rmiRegistry 
 	public Registry(String ipAddress, int port){
 		this.setHost(ipAddress);
 		this.setPort(port);
-		regMap = new ConcurrentHashMap<String, RemoteObjectRef>();
+		
 	}
 	
 	private void setHost(String ipAddress) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	public void bind(String name, RemoteObjectRef obj) throws  AlreadyBoundException, RemoteException{
-		System.out.println("Bind method invoked");
+		
 		if(!regMap.containsKey(name)){
-			//RemoteObjectRef ROR = obj;//new RemoteObjectRef(host,port,name,obj.class_name);
-			regMap.put(name, obj);			
+			
+			regMap.put(name, obj);	
+			
 		}
 		else{
 			throw new AlreadyBoundException("This name - " + name+ " is already bound");
@@ -50,7 +52,8 @@ public class Registry implements RegistryInterface, Runnable {
     	if(regMap.containsKey(name)){
 			
     		unboundKey = regMap.get(name).getkeyName();
-			regMap.remove(name);			
+			regMap.remove(name);	
+			
 		}
     	else{
     		throw new NotBoundException("This name is not binded");
@@ -105,10 +108,7 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 
 		ObjectInputStream regSocketInput = new ObjectInputStream(registrySocket.getInputStream());
 		Registry_stub obj = (Registry_stub)regSocketInput.readObject();
-		System.out.println(obj.getRemoteObjectSent().getIP_adr());
-		System.out.println(obj.getMethodName());
-		System.out.println(obj.getRemoteObjectSent().getkeyName());
-		System.out.println(obj.getRemoteObjectSent().getClass_Name());
+		
 		Object[] methodParams = new Object[]{};
 		methodParams = obj.getMethodParams();
 		System.out.println("MethodParams "+methodParams+" param length "+methodParams.length);
@@ -127,7 +127,7 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
         	suspending.invoke(r, methodParams);
         }
         
-        System.out.println("Map: " + regMap );
+       
 	}
 }
 

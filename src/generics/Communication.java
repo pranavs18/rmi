@@ -1,6 +1,7 @@
 package generics;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
@@ -28,9 +29,11 @@ public class Communication {
 		}
 		
 		ObjectOutputStream oos = null;
+		//ObjectInputStream ois = null;
 		
 		try {
 			oos = new ObjectOutputStream(connectionToServer.getOutputStream());
+			//ois = new ObjectInputStream(connectionToServer.getInputStream());
 		} catch (IOException e) {
 			System.out.println("Object Stream error");
 			e.printStackTrace();
@@ -39,6 +42,8 @@ public class Communication {
 		try {
 			oos.writeObject(stubObject);
 			oos.flush();
+			//ois.readObject();
+			
 		} catch (IOException e) {
 			System.out.println("Object could not be sent to server");
 			e.printStackTrace();

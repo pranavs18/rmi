@@ -77,9 +77,7 @@ public class Registry_stub implements RegistryInterface,Serializable {
 	@Override
 	public void bind(String name, RemoteObjectRef obj)
 			throws AlreadyBoundException, RemoteException {	
-		Object newObj[] = new Object[2];
-		newObj[0] = name;
-		newObj[1] = obj;
+		
 		
 		
 		
@@ -91,8 +89,12 @@ public class Registry_stub implements RegistryInterface,Serializable {
 		this.setHost(arguments[0]);
 		this.setMethodName("bind");
 		this.setPort(Integer.parseInt(arguments[1]));
-		this.setMethodParams(newObj);
 		this.setBindName(arguments[2]);
+		Object newObj[] = new Object[2];
+		newObj[0] = this.getBindName();
+		newObj[1] = obj;
+		this.setMethodParams(newObj);
+		
 		this.setRemoteObjectSent(obj);
 
 		
@@ -108,13 +110,15 @@ public class Registry_stub implements RegistryInterface,Serializable {
 		String hostPortName = this.parseHostPort(name);
 		String arguments[] = null;
 		arguments = hostPortName.split(" ");
-		Object newObj[] = new Object[1];
-		newObj[0] = name;
+		
 		
 		this.setHost(arguments[0]);
 		this.setMethodName("unbind");
 		this.setPort(Integer.parseInt(arguments[1]));
 		this.setBindName(arguments[2]);
+		
+		Object newObj[] = new Object[2];
+		newObj[0] = this.getBindName();
 		this.setMethodParams(newObj);
 		this.setRemoteObjectSent(null);
 		
@@ -126,9 +130,7 @@ public class Registry_stub implements RegistryInterface,Serializable {
 
 	@Override
 	public void rebind(String name, RemoteObjectRef obj) throws RemoteException {
-		Object newObj[] = new Object[2];
-		newObj[0] = name;
-		newObj[1] = obj;
+		
 		
 		String hostPortName = this.parseHostPort(name);
 		String arguments[] = null;
@@ -138,6 +140,9 @@ public class Registry_stub implements RegistryInterface,Serializable {
 		this.setMethodName("rebind");
 		this.setPort(Integer.parseInt(arguments[1]));
 		this.setBindName(arguments[2]);
+		Object newObj[] = new Object[2];
+		newObj[0] = this.getBindName();
+		newObj[1] = obj;
 		this.setRemoteObjectSent(obj);
 		this.setMethodParams(newObj);
 		
