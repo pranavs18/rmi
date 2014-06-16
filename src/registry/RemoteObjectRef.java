@@ -10,13 +10,15 @@ public class RemoteObjectRef implements myRemoteInterface,Serializable
     int Port;
     String name;
     String class_name;
+    String callee;
 
-    public RemoteObjectRef(String ip, int port, String name_key, String cname) 
+    public RemoteObjectRef(String ip, int port, String name_key, String cname, String callee) 
     {
     	this.IP_adr=ip;
     	this.Port=port;
     	this.name =name_key;
     	this.class_name =cname;
+    	this.callee = callee;
     }
 
     // this method is important, since it is a stub creator.
@@ -33,6 +35,8 @@ public class RemoteObjectRef implements myRemoteInterface,Serializable
     }
     
     // getter for the above defined variables
+    
+    
     public String getClass_Name(){
     	return this.class_name;
     }
@@ -47,6 +51,10 @@ public class RemoteObjectRef implements myRemoteInterface,Serializable
     
     public String getkeyName(){
     	return this.name;
+    }
+    
+    public String getCallee(){
+    	return this.callee;
     }
     
 }

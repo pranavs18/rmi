@@ -1,9 +1,7 @@
 package generics;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.URL;
 import java.net.UnknownHostException;
 
 import Server.ObjectMap;
@@ -23,7 +21,7 @@ public class Naming{
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
-		RemoteObjectRef newRef = new RemoteObjectRef(ip, 9999, obj.toString(), className);
+		RemoteObjectRef newRef = new RemoteObjectRef(ip, 9999, obj.toString(), className,"bind");
 		
 		ObjectMap.insertIntoServerMap(obj.toString(), obj);
 		
@@ -64,7 +62,7 @@ public class Naming{
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
-		RemoteObjectRef newRef = new RemoteObjectRef(ip, 9999, obj.toString(), className);
+		RemoteObjectRef newRef = new RemoteObjectRef(ip, 9999, obj.toString(), className,"rebind");
 		
 		ObjectMap.insertIntoServerMap(obj.toString(), obj);
 		

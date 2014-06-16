@@ -20,6 +20,7 @@ public class Communication {
 	
 	public void connect(){
 		
+		
 		Socket connectionToServer = null;
 		
 		try {
@@ -44,7 +45,7 @@ public class Communication {
 			oos.flush();
 			//ois.readObject();
 			
-		} catch (IOException e) {
+		} catch (IOException e/*| ClassNotFoundException e*/) {
 			System.out.println("Object could not be sent to server");
 			e.printStackTrace();
 		}
