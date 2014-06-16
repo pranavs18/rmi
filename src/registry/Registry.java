@@ -19,7 +19,7 @@ public class Registry implements RegistryInterface, Runnable {
 	public final static int registry_port = 1099;
 	private String host;
 	private int port;
-	ConcurrentHashMap<String, RemoteObjectRef> regMap;
+	private static ConcurrentHashMap<String, RemoteObjectRef> regMap;
 
 	//Constructor to instantiate rmiRegistry 
 	public Registry(String ipAddress, int port){
@@ -34,9 +34,10 @@ public class Registry implements RegistryInterface, Runnable {
 	}
 
 	public void bind(String name, RemoteObjectRef obj) throws  AlreadyBoundException, RemoteException{
+		System.out.println("Bind method invoked");
 		if(!regMap.containsKey(name)){
-			RemoteObjectRef ROR = new RemoteObjectRef(host,port,name,obj.class_name);
-			regMap.put(name, ROR);			
+			//RemoteObjectRef ROR = obj;//new RemoteObjectRef(host,port,name,obj.class_name);
+			regMap.put(name, obj);			
 		}
 		else{
 			throw new AlreadyBoundException("This name - " + name+ " is already bound");
@@ -109,18 +110,24 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 		System.out.println(obj.getRemoteObjectSent().getkeyName());
 		System.out.println(obj.getRemoteObjectSent().getClass_Name());
 		Object[] methodParams = new Object[]{};
+		methodParams = obj.getMethodParams();
+		System.out.println("MethodParams "+methodParams+" param length "+methodParams.length);
+		
+		Class<?>[] paramTypes = new Class[methodParams.length];
+		for (int i = 0; i < methodParams.length; i++) {
+		paramTypes[i] = methodParams[i].getClass();
+		}
 		
 		Registry r = new Registry(obj.getRemoteObjectSent().getIP_adr(),obj.getRemoteObjectSent().getPort());
-		//Class<?> noParmeter[] = {};
-        Method suspending = r.getClass().getDeclaredMethod(obj.getMethodName(), new Class[] {} );
+        Method suspending = r.getClass().getDeclaredMethod(obj.getMethodName(), paramTypes );
         suspending.setAccessible(true);
         if(methodParams.length == 0)
         	suspending.invoke(r, (Object[])null);
         else{
         	suspending.invoke(r, methodParams);
         }
-
-		
+        
+        System.out.println("Map: " + regMap );
 	}
 }
 
