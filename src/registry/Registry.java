@@ -62,7 +62,7 @@ public class Registry implements RegistryInterface, Runnable {
         	   try {
 				throw new AlreadyBoundException("This name - " + name+ " is already bound...cannot rebind");
 			} catch (AlreadyBoundException e) {
-				
+				e.printStackTrace();
 			   }
            }
            else{
@@ -117,26 +117,17 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 		Socket registrySocket = registryServer.accept();	
 
 		ObjectInputStream regSocketInput = new ObjectInputStream(registrySocket.getInputStream());
-		Registry_stub obj = (Registry_stub) regSocketInput.readObject();
-		
-		Object[] methodParams = new Object[]{};
-		methodParams = obj.getMethodParams();
-		System.out.println("MethodParams "+methodParams+" param length "+methodParams.length);
-		
-		Class<?>[] paramTypes = new Class[methodParams.length];
-		for (int i = 0; i < methodParams.length; i++) {
-		paramTypes[i] = methodParams[i].getClass();
-		}
-		
-		Registry r = new Registry(obj.getRemoteObjectSent().getIP_adr(),obj.getRemoteObjectSent().getPort());
-        Method suspending = r.getClass().getDeclaredMethod(obj.getMethodName(), paramTypes );
+		Registry_skel obj = (Registry_skel) regSocketInput.readObject();
+
+		Registry r = new Registry(obj.getMessage().getRor().getIP_adr(),obj.getMessage().getRor().getPort());
+        Method suspending = r.getClass().getDeclaredMethod(obj.getMessage().getMethodName(), obj.getMessage().getArgTypes() );
         suspending.setAccessible(true);
-        if(methodParams.length == 0)
+
+        if(obj.getMessage().getArguments().length == 0)
         	suspending.invoke(r, (Object[])null);
         else{
-        	suspending.invoke(r, methodParams);
+        	suspending.invoke(r, obj.getMessage().getArguments());
         }
-        
        
 	}
 }

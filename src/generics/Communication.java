@@ -18,7 +18,7 @@ public class Communication {
 		this.stubObject = stubObject;	
 	}
 	
-	public void connect(){
+	public Message connect(){
 		
 		
 		Socket connectionToServer = null;
@@ -34,7 +34,7 @@ public class Communication {
 		
 		try {
 			oos = new ObjectOutputStream(connectionToServer.getOutputStream());
-			//ois = new ObjectInputStream(connectionToServer.getInputStream());
+		//	ois = new ObjectInputStream(connectionToServer.getInputStream());
 		} catch (IOException e) {
 			System.out.println("Object Stream error");
 			e.printStackTrace();
@@ -43,9 +43,9 @@ public class Communication {
 		try {
 			oos.writeObject(stubObject);
 			oos.flush();
-			//ois.readObject();
+		//	ois.readObject();
 			
-		} catch (IOException e/*| ClassNotFoundException e*/) {
+		} catch (IOException /*| ClassNotFoundException */e) {
 			System.out.println("Object could not be sent to server");
 			e.printStackTrace();
 		}
@@ -54,6 +54,7 @@ public class Communication {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 		
 	}
 	

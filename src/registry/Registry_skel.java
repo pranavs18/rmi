@@ -1,8 +1,11 @@
 package registry;
 
 import generics.Communication;
+import generics.Message;
+import generics.MessageType;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 
 public class Registry_skel implements RegistryInterface,Serializable {
 
@@ -14,25 +17,16 @@ public class Registry_skel implements RegistryInterface,Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	
-	String methodName;
-	RemoteObjectRef remoteObjectSent;
 	String host;
 	Integer port;
 	String bindName;
-	Object[] methodParams;
-	
-	
-	
-	
-	public Object[] getMethodParams() {
-		return methodParams;
-	}
 
-	public void setMethodParams(Object[] methodParams) {
-		this.methodParams = methodParams;
-	}
-
+	
+	Message message;
+	
+	
 	public String getBindName() {
 		return bindName;
 	}
@@ -41,21 +35,6 @@ public class Registry_skel implements RegistryInterface,Serializable {
 		this.bindName = bindName;
 	}
 
-	public String getMethodName() {
-		return methodName;
-	}
-
-	public void setMethodName(String methodName) {
-		this.methodName = methodName;
-	}
-
-	public RemoteObjectRef getRemoteObjectSent() {
-		return remoteObjectSent;
-	}
-
-	public void setRemoteObjectSent(RemoteObjectRef remoteObjectSent) {
-		this.remoteObjectSent = remoteObjectSent;
-	}
 
 	public String getHost() {
 		return host;
@@ -72,8 +51,16 @@ public class Registry_skel implements RegistryInterface,Serializable {
 	public void setPort(Integer port) {
 		this.port = port;
 	}
-
 	
+	
+	public Message getMessage() {
+		return message;
+	}
+
+	public void setMessage(Message message) {
+		this.message = message;
+	}
+
 	@Override
 	public void bind(String name, RemoteObjectRef obj)
 			throws AlreadyBoundException, RemoteException {	
@@ -86,17 +73,42 @@ public class Registry_skel implements RegistryInterface,Serializable {
 		arguments = hostPortName.split(" ");
 		
 		
-		this.setHost(arguments[0]);
-		this.setMethodName("bind");
+		this.setHost(arguments[0]); 
 		this.setPort(Integer.parseInt(arguments[1]));
 		this.setBindName(arguments[2]);
+
+		
 		Object newObj[] = new Object[2];
 		newObj[0] = this.getBindName();
 		newObj[1] = obj;
-		this.setMethodParams(newObj);
-		
-		this.setRemoteObjectSent(obj);
 
+		Class<?> thisClass = null;
+		try {
+			thisClass = Class.forName(this.getClass().getCanonicalName());
+		} catch (ClassNotFoundException e1) {
+			
+			e1.printStackTrace();
+		}
+		
+				
+		Class<?>[] argTypes = new Class[newObj.length];
+		for (int i = 0; i < newObj.length; i++) {
+			argTypes[i] = newObj[i].getClass();
+		} 
+
+		
+		Method method = null;
+		try {
+			method = thisClass.getMethod("bind", argTypes);
+		} catch (NoSuchMethodException | SecurityException e) {
+			
+			e.printStackTrace();
+		}
+		Class<?> returnType =method.getReturnType();
+		
+		Message localMessage = new Message(MessageType.METHOD, "bind", newObj, argTypes, returnType, null, null,obj);
+		
+		this.setMessage(localMessage);
 		
 		Communication comm = new Communication(this.getHost(), this.getPort(), this);
 		comm.connect();
@@ -104,6 +116,8 @@ public class Registry_skel implements RegistryInterface,Serializable {
 		
 	}
 
+	
+	
 	@Override
 	public String unbind(String name) throws RemoteException, NotBoundException {
 		
@@ -113,14 +127,40 @@ public class Registry_skel implements RegistryInterface,Serializable {
 		
 		
 		this.setHost(arguments[0]);
-		this.setMethodName("unbind");
 		this.setPort(Integer.parseInt(arguments[1]));
 		this.setBindName(arguments[2]);
 		
-		Object newObj[] = new Object[2];
+		Object newObj[] = new Object[1];
 		newObj[0] = this.getBindName();
-		this.setMethodParams(newObj);
-		this.setRemoteObjectSent(null);
+		
+		Class<?> thisClass = null;
+		try {
+			thisClass = Class.forName(this.getClass().getCanonicalName());
+		} catch (ClassNotFoundException e1) {
+			
+			e1.printStackTrace();
+		}
+		
+				
+		Class<?>[] argTypes = new Class[newObj.length];
+		for (int i = 0; i < newObj.length; i++) {
+			argTypes[i] = newObj[i].getClass();
+		} 
+
+		
+		Method method = null;
+		try {
+			method = thisClass.getMethod("unbind", argTypes);
+		} catch (NoSuchMethodException | SecurityException e) {
+			
+			e.printStackTrace();
+		}
+		Class<?> returnType =method.getReturnType();
+		
+		Message localMessage = new Message(MessageType.METHOD, "unbind", newObj, argTypes, returnType, null, null,null);
+		
+		this.setMessage(localMessage);
+		
 		
 		Communication comm = new Communication(this.getHost(), this.getPort(), this);
 		comm.connect();
@@ -137,14 +177,42 @@ public class Registry_skel implements RegistryInterface,Serializable {
 		arguments = hostPortName.split(" ");
 		
 		this.setHost(arguments[0]);
-		this.setMethodName("rebind");
+	
 		this.setPort(Integer.parseInt(arguments[1]));
 		this.setBindName(arguments[2]);
 		Object newObj[] = new Object[2];
 		newObj[0] = this.getBindName();
 		newObj[1] = obj;
-		this.setRemoteObjectSent(obj);
-		this.setMethodParams(newObj);
+
+		Class<?> thisClass = null;
+		try {
+			thisClass = Class.forName(this.getClass().getCanonicalName());
+		} catch (ClassNotFoundException e1) {
+			
+			e1.printStackTrace();
+		}
+		
+				
+		Class<?>[] argTypes = new Class[newObj.length];
+		for (int i = 0; i < newObj.length; i++) {
+			argTypes[i] = newObj[i].getClass();
+		} 
+
+		
+		Method method = null;
+		try {
+			method = thisClass.getMethod("rebind", argTypes);
+		} catch (NoSuchMethodException | SecurityException e) {
+			
+			e.printStackTrace();
+		}
+		Class<?> returnType =method.getReturnType();
+		
+		Message localMessage = new Message(MessageType.METHOD, "rebind", newObj, argTypes, returnType, null, null,obj);
+		
+		this.setMessage(localMessage);
+
+	
 		
 		Communication comm = new Communication(this.getHost(), this.getPort(), this);
 		comm.connect();
