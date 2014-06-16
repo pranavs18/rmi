@@ -60,8 +60,8 @@ public class Registry implements RegistryInterface, Runnable {
     
     public void rebind(String name, RemoteObjectRef obj) throws RemoteException{
     	
-    	RemoteObjectRef ROR = new RemoteObjectRef(host,port,name,obj.class_name);
-		regMap.put(name, ROR);	
+    	
+		regMap.put(name, obj);	
     }
 
 	public int getPort() {
