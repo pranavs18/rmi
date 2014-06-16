@@ -117,7 +117,7 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 		Socket registrySocket = registryServer.accept();	
 
 		ObjectInputStream regSocketInput = new ObjectInputStream(registrySocket.getInputStream());
-		Registry_stub obj = (Registry_stub)regSocketInput.readObject();
+		Registry_stub obj = (Registry_stub) regSocketInput.readObject();
 		
 		Object[] methodParams = new Object[]{};
 		methodParams = obj.getMethodParams();
