@@ -10,13 +10,13 @@ public class RemoteException extends Exception {
 
     // constructor to display the cause of the remote exception without any arguments
 	public RemoteException(){
-	        initCause(null);
+	        super();
 	    }
 
 	//constructor with argument as a string message     
 	    public RemoteException(String message){
 	        super(message);
-	        initCause(null);
+	        
 	    }
 
 }

@@ -10,6 +10,8 @@ import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Registry implements RegistryInterface, Runnable {
@@ -86,6 +88,25 @@ public class Registry implements RegistryInterface, Runnable {
         }
         	
     }
+    
+    
+    @Override
+	public RemoteObjectRef lookUP(String name) {
+		if(regMap.containsKey(name)){
+		RemoteObjectRef value = regMap.get(name);
+		return value;
+		}
+		return null;
+	}
+
+	@Override
+	public ArrayList<String> listObjects() {
+		ArrayList<String> al = new ArrayList<String>();
+		for(Entry<String,RemoteObjectRef> e: regMap.entrySet()){
+		al.add(e.getKey());
+		}
+		return al;
+	}
 
 	
 
@@ -165,7 +186,7 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 				oos.writeObject(ret);
 			}
         	
-        	
+        	System.out.println(regMap);
         }
        
 	}

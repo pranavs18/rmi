@@ -6,7 +6,9 @@ import generics.myRemoteInterface;
 
 public class RemoteObjectRef implements myRemoteInterface,Serializable
 {
-    String IP_adr;
+    
+	private static final long serialVersionUID = 1L;
+	String IP_adr;
     int Port;
     String name;
     String class_name;

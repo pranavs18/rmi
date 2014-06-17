@@ -6,6 +6,7 @@ import generics.MessageType;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class Registry_stub implements RegistryInterface,Serializable {
 
@@ -255,5 +256,15 @@ public String parseHostPort(String fullName){
 		String finalString = host+" "+port+" "+name;
 		return finalString;
 	}
+
+@Override
+public RemoteObjectRef lookUP(String name) {
+	return null;
+}
+
+@Override
+public ArrayList<String> listObjects() {
+	return null;
+}
 		
 }

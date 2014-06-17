@@ -44,8 +44,10 @@ public class remoteServer implements Runnable,Serializable{
 		regServerTest test = new regServerTest();
 		
 		try {
-			Naming.bind("//127.0.0.1:1099/firstObject", test);
+			 Naming.bind("//127.0.0.1:1099/firstObject", test);
+			 Naming.rebind("//127.0.0.1:1099/firstObject", test);
 			Naming.unbind("//127.0.0.1:1099/firstObject");
+			Naming.rebind("//127.0.0.1:1099/firstObject", test);
 		} catch (AlreadyBoundException | RemoteException e) {
 			
 			e.printStackTrace();

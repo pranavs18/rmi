@@ -1,5 +1,7 @@
 package registry;
 
+import java.util.ArrayList;
+
 import generics.Message;
 import generics.myRemoteInterface;
 
@@ -17,6 +19,8 @@ public interface RegistryInterface extends myRemoteInterface{
 	public void setPort(Integer port);
 	public Message getMessage();
 	public void setMessage(Message message);
+	RemoteObjectRef lookUP(String name);
+	ArrayList<String> listObjects();
 	
 	
     

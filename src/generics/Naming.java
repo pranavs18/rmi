@@ -57,7 +57,7 @@ public class Naming{
 			e.printStackTrace();
 		}
 		String retVal = stub.unbind(name);
-		System.out.println("return Value" + retVal);
+		
 		
 		
 	}
