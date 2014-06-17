@@ -19,6 +19,11 @@ public class Registry implements RegistryInterface, Runnable {
 	private int port;
 	private static ConcurrentHashMap<String, RemoteObjectRef> regMap= new ConcurrentHashMap<String, RemoteObjectRef>();
 
+	
+	public Registry(){
+		
+	}
+	
 	//Constructor to instantiate rmiRegistry 
 	public Registry(String ipAddress, int port){
 		this.setHost(ipAddress);
@@ -43,17 +48,22 @@ public class Registry implements RegistryInterface, Runnable {
 	}
 	
     public String unbind(String name) throws RemoteException, NotBoundException{
+    	System.out.println("Unbind method invoked");
+    	
     	String unboundKey = null;
+    	RemoteObjectRef ror = null;
     	
     	if(regMap.containsKey(name)){
-			
-    		unboundKey = regMap.get(name).getkeyName();
+    		ror = regMap.get(name);
+    		
+    		unboundKey = ror.getkeyName();
 			regMap.remove(name);	
-			
+				
 		}
     	else{
     		throw new NotBoundException("This name is not binded");
     	}
+    	
     return unboundKey;
     }
     
@@ -107,7 +117,8 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 		ObjectInputStream regSocketInput = new ObjectInputStream(registrySocket.getInputStream());
 		RegistryInterface obj = (Registry_stub) regSocketInput.readObject();
 
-		Registry r = new Registry(obj.getMessage().getRor().getIP_adr(),obj.getMessage().getRor().getPort());
+		Registry r = new Registry();
+		
         Method suspending = r.getClass().getDeclaredMethod(obj.getMessage().getMethodName(), obj.getMessage().getArgTypes() );
         
 
@@ -128,7 +139,7 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
         	try {
         		suspending.setAccessible(true);
 				returnValue = suspending.invoke(r, obj.getMessage().getArguments());
-				System.out.println("Hello return returnval"+returnValue);
+				
 				returnMessage = new Message(MessageType.RETURN, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), returnValue, null, obj.getMessage().getRor());
 				
 				Registry_stub ret = new Registry_stub();
@@ -140,10 +151,10 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 				ObjectOutputStream oos = new ObjectOutputStream(registrySocket.getOutputStream());
 				oos.writeObject(ret);
 			} catch (InvocationTargetException e) {
-				System.err.println("InvocationTarget exception caught !!!");
+				
 				Throwable cause = e.getCause();
 				returnMessage = new Message(MessageType.EXCEPTION, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), null, cause.getMessage(), obj.getMessage().getRor());
-				System.out.println("cause"+cause.getMessage());
+				
 				Registry_stub ret = new Registry_stub();
 				ret.setBindName(null);
 				ret.setHost(null);
@@ -153,6 +164,8 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 				ObjectOutputStream oos = new ObjectOutputStream(registrySocket.getOutputStream());
 				oos.writeObject(ret);
 			}
+        	
+        	
         }
        
 	}

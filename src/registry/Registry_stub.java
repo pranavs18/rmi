@@ -180,7 +180,7 @@ public class Registry_stub implements RegistryInterface,Serializable {
 		}
 		
 		else if(returnMessage.getMessageType() == MessageType.RETURN) {
-			strReturnMessage = (String)returnMessage.getReturnValue();
+			strReturnMessage = returnMessage.getReturnValue().toString();
 		}
 		
 		return strReturnMessage;

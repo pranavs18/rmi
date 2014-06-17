@@ -21,7 +21,11 @@ public class Naming{
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
-		RemoteObjectRef newRef = new RemoteObjectRef(ip, 9999, obj.toString(), className,"bind");
+		
+		String nameWithSpace = Naming.parseHostPort(name);
+		String args[] = nameWithSpace.split(" ");
+		
+		RemoteObjectRef newRef = new RemoteObjectRef(ip, 9999,args[2] , className,"bind");
 		
 		ObjectMap.insertIntoServerMap(obj.toString(), obj);
 		
@@ -52,8 +56,8 @@ public class Naming{
 				| ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		stub.unbind(name);
-		
+		String retVal = stub.unbind(name);
+		System.out.println("return Value" + retVal);
 		
 		
 	}
@@ -81,6 +85,18 @@ public class Naming{
 		stub.rebind(name, newRef);
 		
 		
+	}
+	
+	public static String parseHostPort(String fullName){
+		
+		String newName = fullName.trim();
+		int indexOfColon = newName.indexOf(":");
+		int indexOfSlash = newName.indexOf("/", indexOfColon);
+		String host = newName.substring(2, indexOfColon);
+		String port = newName.substring(indexOfColon+1,indexOfSlash);
+		String name = newName.substring(indexOfSlash+1);
+		String finalString = host+" "+port+" "+name;
+		return finalString;
 	}
 	
 	public static byte[] downloadToServer(Class<?> className, RemoteObjectRef obj){

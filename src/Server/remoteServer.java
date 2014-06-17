@@ -12,8 +12,10 @@ import java.net.Socket;
 
 
 
+
 import generics.Naming;
 import registry.AlreadyBoundException;
+import registry.NotBoundException;
 import registry.RemoteException;
 import registry.RemoteObjectRef;
 
@@ -37,13 +39,13 @@ public class remoteServer implements Runnable,Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public static void main(String args[]) throws IOException{
+	public static void main(String args[]) throws IOException, NotBoundException{
 		
 		regServerTest test = new regServerTest();
 		
 		try {
 			Naming.bind("//127.0.0.1:1099/firstObject", test);
-			Naming.rebind("//127.0.0.1:1099/firstObject", test);
+			Naming.unbind("//127.0.0.1:1099/firstObject");
 		} catch (AlreadyBoundException | RemoteException e) {
 			
 			e.printStackTrace();
