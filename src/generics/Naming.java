@@ -27,8 +27,13 @@ public class Naming{
 		
 		RegistryInterface stub = null;
 		 try{
-			
+			 
+			 Class<?> stub_class = Class.forName("registry.Registry_stub");
+			 System.out.println(stub_class);
 			 stub = (RegistryInterface)Class.forName("registry.Registry_stub").newInstance();
+			 if(stub_class != null){
+				 byte[] temp = downloadToServer(stub_class, newRef);
+			 }
 		} catch (InstantiationException | IllegalAccessException
 				| ClassNotFoundException e) {
 			e.printStackTrace();
@@ -76,6 +81,15 @@ public class Naming{
 		stub.rebind(name, newRef);
 		
 		
+	}
+	
+	public static byte[] downloadToServer(Class<?> className, RemoteObjectRef obj){
+		byte[] temp = null;
+	/*	String name = className.getName();
+		System.out.println("Class file to be downloaded is :" + name);
+		String genericClassPathFormat = name.replaceAll("\\.", "/") + ".class";
+		String httpURL = "http://" + obj.getIP_adr() + ":" + obj.getPort() + "/Registry" + genericClassPathFormat;*/
+		return temp;
 	}
  
 	

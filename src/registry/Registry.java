@@ -63,7 +63,7 @@ public class Registry implements RegistryInterface, Runnable {
 				throw new AlreadyBoundException("This name - " + name+ " is already bound...cannot rebind");
 			} catch (AlreadyBoundException e) {
 				e.printStackTrace();
-			   }
+            }
            }
            else{
         	   System.out.println("Re-binding method Invoked...");
