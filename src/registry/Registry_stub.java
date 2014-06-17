@@ -14,9 +14,7 @@ public class Registry_stub implements RegistryInterface,Serializable {
 	public Registry_stub() {
 	
 	}
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	
