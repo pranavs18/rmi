@@ -1,5 +1,69 @@
 package Client;
 
-public class rmiClient{
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class rmiClient implements Runnable{
+
+	String ServerIp;
+	static int ServerPort = 9999;
+	private static int clientPort = 10000;
+   public rmiClient(String ServerIp){
+		
+		this.ServerIp = ServerIp;
+				
+	}
+   
+   public void startrmiClient(String ServerIp, int ServerPort) throws UnknownHostException, IOException, InterruptedException{
+		@SuppressWarnings("resource")
+		Socket workerServer = new Socket(ServerIp,ServerPort);
+
+		while(true){
+		
+        PrintStream out = new PrintStream(workerServer.getOutputStream());
+		
+		
+		
+		out.println("Hello "+ clientPort);
+		Thread.sleep(1000);
+		InputStreamReader input = new InputStreamReader(workerServer.getInputStream());
+		BufferedReader in = new BufferedReader(input);
+		System.out.println("Hello "+ clientPort);
+		out.flush();
+		
+
+		}
+	  
+	}
+	@Override
+	public void run() {
+		try {
+			startrmiClient(ServerIp,ServerPort);
+		} catch (UnknownHostException e) {	
+			e.printStackTrace();
+		} catch (IOException e) {			
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+public static void main(String[] args){
+		
+		
+		String ServerIp = args[0];		
+	
+		rmiClient client = new rmiClient(ServerIp);
+		
+		// Starts worker host thread
+		new Thread(client).start();
+		
+	}
 	
 }

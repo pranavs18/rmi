@@ -13,6 +13,8 @@ import java.net.Socket;
 
 
 
+import java.util.Map.Entry;
+
 import generics.Naming;
 import registry.AlreadyBoundException;
 import registry.NotBoundException;
@@ -125,7 +127,15 @@ class clientConnection implements Runnable {
 	public void run(){
 		while(!done){
 			try {			
-				String message = br.readLine();			
+				String message = br.readLine();	
+				ps.println(" \n welcome client " +  id );
+				if(message == null){
+					System.out.println( "Connection " + id + " closed." );
+		             br.close();
+		             ps.close();
+		             SOCK.close();
+		            break;
+				}
 			} catch (Exception e) {
 				
 				System.out.println( "Connection " + id + " closed." );
