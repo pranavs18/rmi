@@ -58,7 +58,7 @@ public class Naming{
 		
 	}
 
-	public static void rebind(String name, myRemoteInterface obj) throws RemoteException {
+	public static void rebind(String name, myRemoteInterface obj) throws RemoteException, AlreadyBoundException {
 	
 		String className = obj.getClass().getName();
 		String ip = null;

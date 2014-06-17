@@ -1,7 +1,10 @@
 package registry;
-import generics.myRemoteInterface;
+import generics.Message;
+import generics.MessageType;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.ServerSocket;
@@ -22,14 +25,11 @@ public class Registry implements RegistryInterface, Runnable {
 		this.setPort(port);
 		
 	}
-	
-	private void setHost(String ipAddress) {
-		
-		
-	}
 
-	public void bind(String name, RemoteObjectRef obj) throws  AlreadyBoundException, RemoteException{
+
+	public void bind(String name, RemoteObjectRef obj) throws AlreadyBoundException {
 		System.out.println("Binding method Invoked...");
+		
 		if(!regMap.containsKey(name)){
 			
 			regMap.put(name, obj);	
@@ -37,7 +37,9 @@ public class Registry implements RegistryInterface, Runnable {
 		}
 		else{
 			throw new AlreadyBoundException("This name - " + name+ " is already bound");
+			
 		}
+		
 	}
 	
     public String unbind(String name) throws RemoteException, NotBoundException{
@@ -55,15 +57,13 @@ public class Registry implements RegistryInterface, Runnable {
     return unboundKey;
     }
     
-    public void rebind(String name, RemoteObjectRef obj) throws RemoteException{
+    public void rebind(String name, RemoteObjectRef obj) throws RemoteException, AlreadyBoundException{
    
         if(regMap.containsKey(name)){
            if(regMap.get(name).getCallee().equals("bind"))	{
-        	   try {
+        	   
 				throw new AlreadyBoundException("This name - " + name+ " is already bound...cannot rebind");
-			} catch (AlreadyBoundException e) {
-				e.printStackTrace();
-            }
+
            }
            else{
         	   System.out.println("Re-binding method Invoked...");
@@ -77,18 +77,6 @@ public class Registry implements RegistryInterface, Runnable {
         	
     }
 
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public String getHost() {
-		return host;
-	}
-
 	
 
 	@Override
@@ -98,7 +86,7 @@ public class Registry implements RegistryInterface, Runnable {
 				try {
 					startRegistry(host, registry_port);
 					
-				} catch (ClassNotFoundException | InterruptedException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				} catch (ClassNotFoundException | InterruptedException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException e) {
 					e.printStackTrace();
 				}
 			} catch (IOException e) {
@@ -107,7 +95,7 @@ public class Registry implements RegistryInterface, Runnable {
    
 	}
 	
-private void startRegistry(String host, int registryPort) throws IOException, ClassNotFoundException, InterruptedException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+private void startRegistry(String host, int registryPort) throws IOException, ClassNotFoundException, InterruptedException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException {
 		
 	@SuppressWarnings("resource")
 	ServerSocket registryServer = new ServerSocket(registryPort);
@@ -117,20 +105,61 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 		Socket registrySocket = registryServer.accept();	
 
 		ObjectInputStream regSocketInput = new ObjectInputStream(registrySocket.getInputStream());
-		Registry_skel obj = (Registry_skel) regSocketInput.readObject();
+		RegistryInterface obj = (Registry_stub) regSocketInput.readObject();
 
 		Registry r = new Registry(obj.getMessage().getRor().getIP_adr(),obj.getMessage().getRor().getPort());
         Method suspending = r.getClass().getDeclaredMethod(obj.getMessage().getMethodName(), obj.getMessage().getArgTypes() );
-        suspending.setAccessible(true);
+        
 
-        if(obj.getMessage().getArguments().length == 0)
-        	suspending.invoke(r, (Object[])null);
-        else{
-        	suspending.invoke(r, obj.getMessage().getArguments());
+        Object returnValue;
+        Message returnMessage;
+        
+        if(obj.getMessage().getArguments().length == 0){
+			try {
+				suspending.setAccessible(true);
+				returnValue = suspending.invoke(r, (Object[])null);
+				returnMessage = new Message(MessageType.RETURN, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), returnValue, null, obj.getMessage().getRor());
+			} catch (InvocationTargetException e) {		
+				Throwable cause = e.getCause();
+					returnMessage = new Message(MessageType.EXCEPTION, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), null, cause.getMessage(), obj.getMessage().getRor());
+			}
+        }
+		else{
+        	try {
+        		suspending.setAccessible(true);
+				returnValue = suspending.invoke(r, obj.getMessage().getArguments());
+				System.out.println("Hello return returnval"+returnValue);
+				returnMessage = new Message(MessageType.RETURN, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), returnValue, null, obj.getMessage().getRor());
+				
+				Registry_stub ret = new Registry_stub();
+				ret.setBindName(null);
+				ret.setHost(null);
+				ret.setPort(null);
+				ret.setMessage(returnMessage);
+				
+				ObjectOutputStream oos = new ObjectOutputStream(registrySocket.getOutputStream());
+				oos.writeObject(ret);
+			} catch (InvocationTargetException e) {
+				System.err.println("InvocationTarget exception caught !!!");
+				Throwable cause = e.getCause();
+				returnMessage = new Message(MessageType.EXCEPTION, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), null, cause.getMessage(), obj.getMessage().getRor());
+				System.out.println("cause"+cause.getMessage());
+				Registry_stub ret = new Registry_stub();
+				ret.setBindName(null);
+				ret.setHost(null);
+				ret.setPort(null);
+				ret.setMessage(returnMessage);
+				
+				ObjectOutputStream oos = new ObjectOutputStream(registrySocket.getOutputStream());
+				oos.writeObject(ret);
+			}
         }
        
 	}
 }
+
+
+
 
 public static void main(String[] args) throws UnknownHostException{
 	
@@ -145,5 +174,53 @@ public static void main(String[] args) throws UnknownHostException{
 		System.out.println("Starting registry on host " + Registry_IP + " and port " + registry_port);
 		new Thread(reg).start();
 	}
+
+
+@Override
+public String getBindName() {
+	
+	return null;
+}
+
+
+@Override
+public void setBindName(String bindName) {
+	
+}
+
+
+@Override
+public String getHost() {
+	return null;
+}
+
+
+@Override
+public void setHost(String host) {
+	
+}
+
+
+@Override
+public Integer getPort() {
+	return null;
+}
+
+
+@Override
+public void setPort(Integer port) {
+}
+
+
+@Override
+public Message getMessage() {
+	return null;
+}
+
+
+@Override
+public void setMessage(Message message) {
+	
+}
 	
 }
