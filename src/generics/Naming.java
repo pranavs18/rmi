@@ -3,6 +3,7 @@ package generics;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import Server.ObjectMap;
 import registry.AlreadyBoundException;
@@ -14,7 +15,7 @@ import registry.RemoteObjectRef;
 public class Naming{
 
 	public static void bind(String name, myRemoteInterface obj) throws AlreadyBoundException, RemoteException, IOException {
-		String className = obj.getClass().getName();
+		String className = obj.getClass().getCanonicalName();
 		String ip = null;
 		try {
 			ip = InetAddress.getLocalHost().getHostAddress();
@@ -33,7 +34,6 @@ public class Naming{
 		 try{
 			 
 			 Class<?> stub_class = Class.forName("registry.Registry_stub");
-			 System.out.println(stub_class);
 			 stub = (RegistryInterface)Class.forName("registry.Registry_stub").newInstance();
 			 if(stub_class != null){
 				 byte[] temp = downloadToServer(stub_class, newRef);
@@ -57,6 +57,7 @@ public class Naming{
 			e.printStackTrace();
 		}
 		String retVal = stub.unbind(name);
+		ObjectMap.removeFromServerMap(retVal);
 		
 		
 		
@@ -64,7 +65,7 @@ public class Naming{
 
 	public static void rebind(String name, myRemoteInterface obj) throws RemoteException, AlreadyBoundException {
 	
-		String className = obj.getClass().getName();
+		String className = obj.getClass().getCanonicalName();
 		String ip = null;
 		try {
 			ip = InetAddress.getLocalHost().getHostAddress();
@@ -87,18 +88,42 @@ public class Naming{
 		
 	}
 	
+	public static myRemoteInterface lookUp(String name){
+	
+		RegistryInterface stub = null;
+		try{
+			stub = (RegistryInterface)Class.forName("registry.Registry_stub").newInstance();
+		}catch (InstantiationException | IllegalAccessException
+				| ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return (myRemoteInterface)stub.lookUp(name);
+		
+	}
+	
+	public ArrayList<String> list(String name){
+		
+		
+		return null;
+		
+		
+		
+	}
 	public static String parseHostPort(String fullName){
 		
 		String newName = fullName.trim();
-		int indexOfColon = newName.indexOf(":");
-		int indexOfSlash = newName.indexOf("/", indexOfColon);
-		String host = newName.substring(2, indexOfColon);
-		String port = newName.substring(indexOfColon+1,indexOfSlash);
-		String name = newName.substring(indexOfSlash+1);
+		
+		int indexOfSlash1 = newName.indexOf("/");
+		int indexOfColon = newName.indexOf(":",indexOfSlash1);
+		int indexOfSlash2 = newName.indexOf("/", indexOfColon);
+		String host = newName.substring(indexOfSlash1+2, indexOfColon);
+		String port = newName.substring(indexOfColon+1,indexOfSlash2);
+		String name = newName.substring(indexOfSlash2+1);
 		String finalString = host+" "+port+" "+name;
 		return finalString;
 	}
-	
+
 	public static byte[] downloadToServer(Class<?> className, RemoteObjectRef obj){
 		byte[] temp = null;
 	/*	String name = className.getName();

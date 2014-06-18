@@ -19,7 +19,8 @@ public interface RegistryInterface extends myRemoteInterface{
 	public void setPort(Integer port);
 	public Message getMessage();
 	public void setMessage(Message message);
-	RemoteObjectRef lookUP(String name);
+	
+	myRemoteInterface lookUp(String name);
 	ArrayList<String> listObjects();
 	
 	

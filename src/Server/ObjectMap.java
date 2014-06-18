@@ -12,5 +12,9 @@ public static void insertIntoServerMap(String key, Object obj){
 	
 }
 	
-
+public static void removeFromServerMap(String key){
+	
+	objectMap.remove(key);
+	
+}
 }

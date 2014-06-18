@@ -66,7 +66,10 @@ public class Communication {
 		
 		
 		try {
+			oos.close();
+			ois.close();
 			connectionToServer.close();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

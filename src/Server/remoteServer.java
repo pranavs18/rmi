@@ -43,13 +43,14 @@ public class remoteServer implements Runnable,Serializable{
 
 	public static void main(String args[]) throws IOException, NotBoundException{
 		
-		regServerTest test = new regServerTest();
-		
+	//	regServerTest test = new regServerTest();
+		serverArithmetic serAr = new serverArithmetic();
 		try {
-			 Naming.bind("//127.0.0.1:1099/firstObject", test);
-			 Naming.rebind("//127.0.0.1:1099/firstObject", test);
-			Naming.unbind("//127.0.0.1:1099/firstObject");
-			Naming.rebind("//127.0.0.1:1099/firstObject", test);
+			
+		 Naming.bind("//128.237.191.229:1099/test1", serAr);
+			// Naming.rebind("//127.0.0.1:1099/firstObject", test);
+			//Naming.unbind("//127.0.0.1:1099/firstObject");
+			//Naming.rebind("//127.0.0.1:1099/firstObject", test);
 		} catch (AlreadyBoundException | RemoteException e) {
 			
 			e.printStackTrace();

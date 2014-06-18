@@ -91,12 +91,16 @@ public class Registry implements RegistryInterface, Runnable {
     
     
     @Override
-	public RemoteObjectRef lookUP(String name) {
-		if(regMap.containsKey(name)){
+	public RemoteObjectRef lookUp(String name) {
+		System.out.println("Lookup invoked with name "+ name);
+    	if(regMap.containsKey(name)){	
 		RemoteObjectRef value = regMap.get(name);
 		return value;
 		}
+    	else{
+    	System.out.println("Null invoked");
 		return null;
+    	}
 	}
 
 	@Override
@@ -187,6 +191,7 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 			}
         	
         	System.out.println(regMap);
+        	regSocketInput.close();
         }
        
 	}

@@ -1,10 +1,9 @@
 package Server;
 
-import generics.myRemoteInterface;
 
-public class regServerTest implements myRemoteInterface {
+public class regServerTest implements RegServerTestInterface {
 
-	void printHello(){
+	public void printHello(){
 		
 		System.out.println("Hello World");
 		

@@ -25,15 +25,13 @@ public class serverArithmetic_stub implements serverArithmeticInterface, Seriali
 	}
    
     public void setHost(String host) {
-		try {
-			this.host = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+	
+			this.host = host;
+		
 	}
 
 	public void setPort(Integer port) {
-		this.port = 9999;
+		this.port = port;
 	}
 	
     
@@ -44,6 +42,13 @@ public class serverArithmetic_stub implements serverArithmeticInterface, Seriali
 	public int add(int firstNumber, int secondNumber) {
 		this.firstArgument = firstNumber;
 		this.secondArgument = secondNumber;
+		try {
+			this.setHost(InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e2) {
+			e2.printStackTrace();
+		}
+		this.setPort(9999);
+		
 		Object retValue = null;
 		Class<?> thisClass = null;
 		try {
@@ -59,7 +64,12 @@ public class serverArithmetic_stub implements serverArithmeticInterface, Seriali
 		
 		Class<?>[] argTypes = new Class[newObj.length];
 		for (int i = 0; i < newObj.length; i++) {
+			
 			argTypes[i] = newObj[i].getClass();
+			if(!argTypes[i].isPrimitive()){
+				argTypes[i]= int.class;
+			}
+			System.out.println(argTypes[i]);
 		} 
        
 		
@@ -74,7 +84,7 @@ public class serverArithmetic_stub implements serverArithmeticInterface, Seriali
 		Message localMessage = new Message(MessageType.METHOD, "add", newObj, argTypes, returnType, null, null,null);
 		
 		this.setMessage(localMessage);
-		
+		System.out.println("Host port "+this.host+" "+this.port);
 		Communication comm = new Communication(this.getHost(), this.getPort(), this);
 		Message returnMessage = comm.connect();
 		if(returnMessage.getMessageType() == MessageType.EXCEPTION){

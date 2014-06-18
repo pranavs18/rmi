@@ -9,8 +9,13 @@ public class serverArithmetic implements serverArithmeticInterface {
 		this.secondNumber = b;
 	}
 	
+	public serverArithmetic() {
+		
+	}
+
 	//Method to add two numbers
 	public int add(int firstNumber, int secondNumber){
+		System.out.println("Add method invoked received values = "+firstNumber+" and "+secondNumber);
 		return this.firstNumber + this.secondNumber;
 	}
 	
