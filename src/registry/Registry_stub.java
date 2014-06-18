@@ -63,10 +63,7 @@ public class Registry_stub implements RegistryInterface,Serializable {
 	@Override
 	public void bind(String name, RemoteObjectRef obj)
 			throws AlreadyBoundException, RemoteException {	
-		
-		
-		
-		
+			
 		String hostPortName = this.parseHostPort(name);
 		String arguments[] = null;
 		arguments = hostPortName.split(" ");
@@ -130,7 +127,7 @@ public class Registry_stub implements RegistryInterface,Serializable {
 		String hostPortName = this.parseHostPort(name);
 		String arguments[] = null;
 		arguments = hostPortName.split(" ");
-		String strReturnMessage = null;
+		Object strReturnMessage = null;
 		
 		this.setHost(arguments[0]);
 		this.setPort(Integer.parseInt(arguments[1]));
@@ -179,10 +176,10 @@ public class Registry_stub implements RegistryInterface,Serializable {
 		}
 		
 		else if(returnMessage.getMessageType() == MessageType.RETURN) {
-			strReturnMessage = returnMessage.getReturnValue().toString();
+			strReturnMessage = returnMessage.getReturnValue();
 		}
 		
-		return strReturnMessage;
+		return strReturnMessage.toString();
 	}
 
 	@Override

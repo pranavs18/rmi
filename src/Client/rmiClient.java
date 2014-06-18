@@ -12,7 +12,6 @@ public class rmiClient implements Runnable{
 
 	String ServerIp;
 	static int ServerPort = 9999;
-	private static int clientPort = 10000;
    public rmiClient(String ServerIp){
 		
 		this.ServerIp = ServerIp;
@@ -29,11 +28,11 @@ public class rmiClient implements Runnable{
 		
 		
 		
-		out.println("Hello "+ clientPort);
+		out.println("Hello ");
 		Thread.sleep(1000);
 		InputStreamReader input = new InputStreamReader(workerServer.getInputStream());
 		BufferedReader in = new BufferedReader(input);
-		System.out.println("Hello "+ clientPort);
+		//System.out.println("Hello "+ clientPort);
 		out.flush();
 		
 
