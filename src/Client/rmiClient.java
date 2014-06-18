@@ -41,7 +41,7 @@ public class rmiClient implements Runnable{
 //		}
 	  
 	   
-	   serverArithmeticInterface remoteObject = (serverArithmeticInterface)Naming.lookUp("rmi://128.237.191.229:1099/test1");
+	   serverArithmeticInterface remoteObject = (serverArithmeticInterface)Naming.lookUp("rmi://127.0.0.1:1099/test1");
 	   int retVal = remoteObject.add(20, 10);
 	   System.out.println("Sum of 2 numbers : "+ retVal);
 	   

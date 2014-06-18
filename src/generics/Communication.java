@@ -44,6 +44,7 @@ public class Communication {
 		}
 		
 		try {
+			
 			oos.writeObject(stubObject);
 			oos.flush();
 		    

@@ -1,10 +1,7 @@
 package Server;
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -25,135 +22,38 @@ public class remoteServer implements Runnable,Serializable{
 	
 
 	private static final long serialVersionUID = 1L;
-	private static String Ipaddress = null;
-    private static int port ;
-    private int conn=0;
-    private Socket connection;
-    private int ID;
-    
-   
-	public remoteServer(Socket SOCK, int i) {
-		this.connection = SOCK;
-		this.ID = i;
-	}
-
-	public remoteServer() {
-		// TODO Auto-generated constructor stub
-	}
 
 	public static void main(String args[]) throws IOException, NotBoundException{
 		
-	//	regServerTest test = new regServerTest();
+	
 		serverArithmetic serAr = new serverArithmetic();
 		try {
 			
-		 Naming.bind("//128.237.191.229:1099/test1", serAr);
-			// Naming.rebind("//127.0.0.1:1099/firstObject", test);
-			//Naming.unbind("//127.0.0.1:1099/firstObject");
-			//Naming.rebind("//127.0.0.1:1099/firstObject", test);
+		 Naming.bind("//127.0.0.1:1099/test1", serAr);
+		
 		} catch (AlreadyBoundException | RemoteException e) {
 			
 			e.printStackTrace();
 		}
-		Ipaddress = InetAddress.getLocalHost().getHostAddress();
-		port = 9999;
+
 		remoteServer s = new remoteServer();
 		new Thread(s).start();
 		
 	}
   
 	
-	public void createConnection() throws IOException{
-		ServerSocket ss = null;
-		try {
-			ss = new ServerSocket(port);
-			System.out.println("Server started on IP Address "+ Ipaddress + " and port " + port);
-		while ( true ) {
-			
-		    try {
-			Socket clientSocket = ss.accept();
-			conn++;
-			clientConnection newconn = new clientConnection(clientSocket, conn, this);
-			new Thread(newconn).start();
-		    }   
-		    catch (IOException e) {
-			System.out.println(e);
-		    }
 	
-		}
-	}
-		catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		finally{
-			ss.close();
-		}
-	}
 
 	@Override
 	public void run() {
 		
-		 remoteServer rms = new remoteServer();
+		 ConnectClient clients = new ConnectClient();
 		 try {
-			rms.createConnection();
+			clients.createConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-}
-
-class clientConnection implements Runnable {
-	  Socket SOCK;
-	  remoteServer server;
-	  int id;
-	  BufferedReader br = null;
-    PrintStream ps = null;
-    boolean done = false;
-  
-    public clientConnection(Socket client, int id, remoteServer pm) {
-			this.SOCK = client;
-			this.id = id;
-			this.server = pm;
-			System.out.println( "Connection " + id + " established with: " + SOCK );
-			
-			try {
-			    br = new BufferedReader(new InputStreamReader(SOCK.getInputStream()));
-			    ps = new PrintStream(SOCK.getOutputStream());
-			} catch (IOException e) {
-			    System.out.println(e);
-			}
-		}
-    
-	public void run(){
-		while(!done){
-			try {			
-				String message = br.readLine();	
-				ps.println(" \n welcome client " +  id );
-				if(message == null){
-					System.out.println( "Connection " + id + " closed." );
-		             br.close();
-		             ps.close();
-		             SOCK.close();
-		            break;
-				}
-			} catch (Exception e) {
-				
-				System.out.println( "Connection " + id + " closed." );
-				
-				 try {
-					br.close();
-					ps.close();
-		            SOCK.close();
-				} catch (IOException e1) {
-					
-				}
-	             
-				break;
-			}
-		 
-		
-		}
-	}
 }
 	

@@ -19,6 +19,13 @@ public class ConnectClient {
 		    try {
 			Socket clientSocket = ss.accept();
 		    ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
+		    try {
+				Object o= ois.readObject();
+				System.out.println(o.toString());
+			} catch (ClassNotFoundException e) {
+
+				e.printStackTrace();
+			}
 		    
 		    }   
 		    

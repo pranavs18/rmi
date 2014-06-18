@@ -175,6 +175,10 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 				
 				ObjectOutputStream oos = new ObjectOutputStream(registrySocket.getOutputStream());
 				oos.writeObject(ret);
+				oos.close();
+				
+				
+				
 			} catch (InvocationTargetException e) {
 				
 				Throwable cause = e.getCause();
@@ -188,10 +192,14 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 				
 				ObjectOutputStream oos = new ObjectOutputStream(registrySocket.getOutputStream());
 				oos.writeObject(ret);
+				oos.close();
+				
+				
 			}
         	
         	System.out.println(regMap);
-        	regSocketInput.close();
+        	
+        	regSocketInput.close();	
         }
        
 	}
