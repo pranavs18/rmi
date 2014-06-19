@@ -3,18 +3,20 @@ package generics;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.Socket;
 
 import registry.RegistryInterface;
 import registry.Registry_stub;
 
-public class ClientServerCommunication {
+public class Communication {
 	
 	String host;
 	Integer port;
 	Object stubObject;
 	
-	public ClientServerCommunication(String host, Integer port, Object stubObject){
+	public Communication(String host, Integer port, Object stubObject){
 		
 		this.host = host;
 		this.port = port;
@@ -25,7 +27,7 @@ public Message connect(){
 	
 		Message message = new Message(null, null, null, null, null, null, null, null,null);
 		Socket connectionToServer = null;
-		//Add locate registry
+		
 		try {
 			connectionToServer = new Socket(host,port);
 		} catch (IOException e) {
@@ -37,14 +39,6 @@ public Message connect(){
 		
 		try {
 			oos = new ObjectOutputStream(connectionToServer.getOutputStream());
-		   
-		} catch (IOException e) {
-			System.out.println("Object Stream error");
-			e.printStackTrace();
-		}
-		
-		try {
-			
 			oos.writeObject(stubObject);
 			oos.flush();
 		    
@@ -56,11 +50,22 @@ public Message connect(){
 		
 		try {
 			ois = new ObjectInputStream(connectionToServer.getInputStream());
-			Message returnMessage = (Message)ois.readObject();
 			
+			Object returnObject =ois.readObject();
+			
+			Class<?> thisClass = null;
+			
+			thisClass = Class.forName(returnObject.getClass().getCanonicalName());
+			Class<?>[] noparams = {};
+			Method method = null;
+			Message returnMessage = null;
+			
+			method = thisClass.getDeclaredMethod("getMessage", noparams);
+			 
+			returnMessage = (Message)method.invoke(returnObject, (Object[])null);
 			
 			message = returnMessage;
-		} catch (IOException | ClassNotFoundException e) {
+		} catch (IOException | ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			
 			e.printStackTrace();
 		}

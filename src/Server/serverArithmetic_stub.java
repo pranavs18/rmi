@@ -1,6 +1,6 @@
 package Server;
 
-import generics.ClientServerCommunication;
+import generics.Communication;
 import generics.Message;
 import generics.MessageType;
 
@@ -59,7 +59,7 @@ public class serverArithmetic_stub implements serverArithmeticInterface, Seriali
 	
 	
 	@Override
-	public int divide(int firstNumber, int secondNumber) {
+	public int divide(int firstNumber, int secondNumber) throws Exception {
 		
 		System.out.println("Boooya Booyah" + this.getLookupName());
 		this.firstArgument = firstNumber;
@@ -107,20 +107,21 @@ public class serverArithmetic_stub implements serverArithmeticInterface, Seriali
 		
 		this.setMessage(localMessage);
 		System.out.println("Host port "+this.host+" "+this.port);
-		ClientServerCommunication comm = new ClientServerCommunication(this.getHost(), this.getPort(), this.getMessage());
+		Communication comm = new Communication(this.getHost(), this.getPort(), this);
 		Message returnMessage = comm.connect();
+		
 		if(returnMessage.getMessageType() == MessageType.EXCEPTION){
-			try {
+			
 				throw new Exception(returnMessage.getException());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			
 		}
 		else if(returnMessage.getMessageType() == MessageType.RETURN) {
 			retValue = returnMessage.getReturnValue();
 			return (int)retValue;
 		}
 		
+		
+	
 		return 0;
 		
 	}

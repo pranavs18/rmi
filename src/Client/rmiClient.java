@@ -2,11 +2,7 @@ package Client;
 
 import generics.Naming;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.net.Socket;
 import java.net.UnknownHostException;
 
 import Server.serverArithmeticInterface;
@@ -22,28 +18,17 @@ public class rmiClient implements Runnable{
 	}
    
    public void startrmiClient(String ServerIp, int ServerPort) throws UnknownHostException, IOException, InterruptedException{
-//		@SuppressWarnings("resource")
-//		Socket workerServer = new Socket(ServerIp,ServerPort);
 
-		
-//		while(true){
-//		
-//        PrintStream out = new PrintStream(workerServer.getOutputStream());
-//		
-//	
-//		out.println("Hello ");
-//		Thread.sleep(1000);
-//		InputStreamReader input = new InputStreamReader(workerServer.getInputStream());
-//		BufferedReader in = new BufferedReader(input);
-//		out.flush();
-//		
-//
-//		}
-	  
-	   
 	   serverArithmeticInterface remoteObject = (serverArithmeticInterface)Naming.lookUp("rmi://127.0.0.1:1099/test1");
-	   int retVal = remoteObject.divide(20, 0);
-	   System.out.println("Sum of 2 numbers : "+ retVal);
+	   int retVal = 0;
+	try {
+		retVal = remoteObject.divide(20, 3);
+		System.out.println("Division of 2 numbers : "+ retVal);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	   
 	   
 	}
 	@Override

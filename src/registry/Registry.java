@@ -154,9 +154,28 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 				suspending.setAccessible(true);
 				returnValue = suspending.invoke(r, (Object[])null);
 				returnMessage = new Message(MessageType.RETURN, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), returnValue, null, obj.getMessage().getRor(),null);
+				Registry_stub ret = new Registry_stub();
+				ret.setBindName(null);
+				ret.setHost(null);
+				ret.setPort(null);
+				ret.setMessage(returnMessage);
+				
+				ObjectOutputStream oos = new ObjectOutputStream(registrySocket.getOutputStream());
+				oos.writeObject(ret);
+				oos.close();
+			
 			} catch (InvocationTargetException e) {		
 				Throwable cause = e.getCause();
 					returnMessage = new Message(MessageType.EXCEPTION, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), null, cause.getMessage(), obj.getMessage().getRor(),null);
+					Registry_stub ret = new Registry_stub();
+					ret.setBindName(null);
+					ret.setHost(null);
+					ret.setPort(null);
+					ret.setMessage(returnMessage);
+					
+					ObjectOutputStream oos = new ObjectOutputStream(registrySocket.getOutputStream());
+					oos.writeObject(ret);
+					oos.close();
 			}
         }
 		else{

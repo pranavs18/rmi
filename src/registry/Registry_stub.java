@@ -1,6 +1,6 @@
 package registry;
 
-import generics.RegistryCommunication;
+import generics.Communication;
 import generics.Message;
 import generics.MessageType;
 import generics.myRemoteInterface;
@@ -110,7 +110,7 @@ public class Registry_stub implements RegistryInterface,Serializable {
 		
 		this.setMessage(localMessage);
 		
-		RegistryCommunication comm = new RegistryCommunication(this.getHost(), this.getPort(), this);
+		Communication comm = new Communication(this.getHost(), this.getPort(), this);
 		Message returnMessage = comm.connect();
 		if(returnMessage.getMessageType() == MessageType.EXCEPTION){
 			try {
@@ -169,7 +169,7 @@ public class Registry_stub implements RegistryInterface,Serializable {
 		this.setMessage(localMessage);
 		
 		
-		RegistryCommunication comm = new RegistryCommunication(this.getHost(), this.getPort(), this);
+		Communication comm = new Communication(this.getHost(), this.getPort(), this);
 		Message returnMessage = comm.connect();
 		if(returnMessage.getMessageType() == MessageType.EXCEPTION){
 			try {
@@ -232,7 +232,7 @@ public class Registry_stub implements RegistryInterface,Serializable {
 
 	
 		
-		RegistryCommunication comm = new RegistryCommunication(this.getHost(), this.getPort(), this);
+		Communication comm = new Communication(this.getHost(), this.getPort(), this);
 		Message returnMessage = comm.connect();
 		if(returnMessage.getMessageType() == MessageType.EXCEPTION){
 			try {
@@ -290,7 +290,7 @@ public myRemoteInterface lookUp(String name) {
 
 
 	
-	RegistryCommunication comm = new RegistryCommunication(this.getHost(), this.getPort(), this);
+	Communication comm = new Communication(this.getHost(), this.getPort(), this);
 	Message returnMessage = comm.connect();
 	RemoteObjectRef ref = null;
 	
