@@ -9,6 +9,7 @@ public class ObjectMap {
 public static void insertIntoServerMap(String key, Object obj){
 	
 	objectMap.put(key, obj);
+	System.out.println("Key "+key+" Value"+obj.toString());
 	
 }
 	
@@ -16,5 +17,9 @@ public static void removeFromServerMap(String key){
 	
 	objectMap.remove(key);
 	
+}
+
+public static Object getObjectFromKey(String key){
+	return objectMap.get(key);
 }
 }

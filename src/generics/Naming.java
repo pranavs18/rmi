@@ -28,7 +28,9 @@ public class Naming{
 		
 		RemoteObjectRef newRef = new RemoteObjectRef(ip, 9999,args[2] , className,"bind");
 		
-		ObjectMap.insertIntoServerMap(obj.toString(), obj);
+		ObjectMap.insertIntoServerMap(args[2], obj);
+		
+		System.out.println("Noooooooo "+obj.getClass().getCanonicalName()); //Remove
 		
 		RegistryInterface stub = null;
 		 try{
@@ -72,13 +74,24 @@ public class Naming{
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
-		RemoteObjectRef newRef = new RemoteObjectRef(ip, 9999, obj.toString(), className,"rebind");
 		
-		ObjectMap.insertIntoServerMap(obj.toString(), obj);
+		String nameWithSpace = Naming.parseHostPort(name);
+		String args[] = nameWithSpace.split(" ");
+		
+		RemoteObjectRef newRef = new RemoteObjectRef(ip, 9999,args[2] , className,"rebind");
+		
+		ObjectMap.insertIntoServerMap(args[2], obj);
+		
+		System.out.println("Noooooooo "+obj.getClass().getCanonicalName()); //Remove
 		
 		RegistryInterface stub = null;
-		 try {
-			stub = (RegistryInterface)Class.forName("registry.Registry_stub").newInstance();
+		 try{
+			 
+			 Class<?> stub_class = Class.forName("registry.Registry_stub");
+			 stub = (RegistryInterface)Class.forName("registry.Registry_stub").newInstance();
+			 if(stub_class != null){
+				 byte[] temp = downloadToServer(stub_class, newRef);
+			 }
 		} catch (InstantiationException | IllegalAccessException
 				| ClassNotFoundException e) {
 			e.printStackTrace();

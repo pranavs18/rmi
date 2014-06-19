@@ -1,7 +1,13 @@
 package Server;
 
+import generics.Message;
+import generics.MessageType;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,62 +25,85 @@ public class ConnectClient {
 		    try {
 			Socket clientSocket = ss.accept();
 		    ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
-		    Object o;
+		    Message msg;
 		    try {
 		    
-		    /* At this point in registry we type casted this object to registry_stub 
-		       and stored it as a Registry interface 
-		       
-		       eg. RegistryInterface r = (Registry_stub)ois.readObject 
-		       
-		       This is because - in case of registry we knew the stub and interfaces will always be Registry_stub
-		       and RegistryInterface.
-		       
-		       In the client server interaction though the interface and stub are written by users. 
-		       serverArithmeticInterface and serverArithmetic_stub (There may be many more like these)
-		       
-		       We need some way to do the following by looking at the object we obtain
-		       
-		       UsersProgramInterface interfaceReference = (UsersProgram_stub)ois.readObject();
-		       
-		       We do get get information about the class it is a type of and interfaces implemented by the object
-		       by using getclass() and getClass().getInterfaces()
-		       
-		       but we need to use this information to perform 
-		       
-		       UsersProgramInterface  interfaceReference = (UsersProgram_stub)ois.readObject();
-		        
-		       at run time.This is where I am stuck!!!.
-		       
-		       We need to find a way to do this!!!
-		       
-		       After this we can use the stub class to get the message object and send the reply value through the stream and close
-		       it and we are done
-		       
-		       */	
-		    o = ois.readObject();
-			
 		    
+		    	msg = (Message)ois.readObject();
+		    	String key = msg.getLookupName();
+		    	Object o = ObjectMap.getObjectFromKey(key);
+		    	
+		    	Class<?> thisClass = null;
+				System.out.println(msg.getRor().getClass_Name()); //remove
+				System.out.println("Ahahahahahah "+ o.getClass().getCanonicalName()); //remove
+				
+				thisClass = Class.forName(msg.getRor().getClass_Name());
+				
+				Method method = null;
+				Message returnMessage = null;
+				Object returnValue = null;
+				Object newObj[] = new Object[msg.getArguments().length];
+				newObj = msg.getArguments();
+				
+				
+				
+				Class<?>[] argTypes = new Class[newObj.length];
+				for (int i = 0; i < newObj.length; i++) {
+					
+					argTypes[i] = newObj[i].getClass();
+					
+					if(!argTypes[i].isPrimitive()){
+						argTypes[i]= int.class;
+					}
+					
+				} 
+				
+				
+					method = thisClass.getMethod(msg.getMethodName(), argTypes);
+				 try {
+					returnValue = method.invoke(o, newObj);
+					
+					returnMessage = new Message(MessageType.RETURN, msg.getMethodName(), msg.getArguments(), msg.getArgTypes(), msg.getReturnType(), returnValue, null, null,null);
+					ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
+					oos.writeObject(returnMessage);
+					oos.close();
+				 
+				 } catch (InvocationTargetException e) {
+					
+					Throwable cause = e.getCause();
+					returnMessage = new Message(MessageType.EXCEPTION, msg.getMethodName(), msg.getArguments(), msg.getArgTypes(), msg.getReturnType(), null, cause.getMessage(), msg.getRor(),null);
+					ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
+					oos.writeObject(returnMessage);
+					oos.close();
+				}
 		    
-		    
-			} catch (ClassNotFoundException e) {
+			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException  | IllegalAccessException | IllegalArgumentException e
+					) {
 
 				e.printStackTrace();
 			}
-		    
-		    }   
+		
+		    ois.close();
+		}   
 		    
 		    catch (IOException e) {
 			System.out.println(e);
 		    }
 	
+		
+		    
 		}
-	}
+	
+		
+		
+		}
 		catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		finally{
+			
 			ss.close();
+			
 		}
 	}
 

@@ -18,7 +18,6 @@ public class Registry implements RegistryInterface, Runnable {
 	
 	public final static int registry_port = 1099;
 	private String host;
-	private int port;
 	private static ConcurrentHashMap<String, RemoteObjectRef> regMap= new ConcurrentHashMap<String, RemoteObjectRef>();
 
 	
@@ -154,10 +153,10 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 			try {
 				suspending.setAccessible(true);
 				returnValue = suspending.invoke(r, (Object[])null);
-				returnMessage = new Message(MessageType.RETURN, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), returnValue, null, obj.getMessage().getRor());
+				returnMessage = new Message(MessageType.RETURN, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), returnValue, null, obj.getMessage().getRor(),null);
 			} catch (InvocationTargetException e) {		
 				Throwable cause = e.getCause();
-					returnMessage = new Message(MessageType.EXCEPTION, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), null, cause.getMessage(), obj.getMessage().getRor());
+					returnMessage = new Message(MessageType.EXCEPTION, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), null, cause.getMessage(), obj.getMessage().getRor(),null);
 			}
         }
 		else{
@@ -165,7 +164,7 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
         		suspending.setAccessible(true);
 				returnValue = suspending.invoke(r, obj.getMessage().getArguments());
 				
-				returnMessage = new Message(MessageType.RETURN, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), returnValue, null, obj.getMessage().getRor());
+				returnMessage = new Message(MessageType.RETURN, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), returnValue, null, obj.getMessage().getRor(),null);
 				
 				Registry_stub ret = new Registry_stub();
 				ret.setBindName(null);
@@ -182,7 +181,7 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 			} catch (InvocationTargetException e) {
 				
 				Throwable cause = e.getCause();
-				returnMessage = new Message(MessageType.EXCEPTION, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), null, cause.getMessage(), obj.getMessage().getRor());
+				returnMessage = new Message(MessageType.EXCEPTION, obj.getMessage().getMethodName(), obj.getMessage().getArguments(), obj.getMessage().getArgTypes(), obj.getMessage().getReturnType(), null, cause.getMessage(), obj.getMessage().getRor(),null);
 				
 				Registry_stub ret = new Registry_stub();
 				ret.setBindName(null);

@@ -1,13 +1,16 @@
 package registry;
 
-import generics.Communication;
+import generics.RegistryCommunication;
 import generics.Message;
 import generics.MessageType;
 import generics.myRemoteInterface;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+
 
 public class Registry_stub implements RegistryInterface,Serializable {
 
@@ -103,11 +106,11 @@ public class Registry_stub implements RegistryInterface,Serializable {
 		}
 		Class<?> returnType =method.getReturnType();
 		
-		Message localMessage = new Message(MessageType.METHOD, "bind", newObj, argTypes, returnType, null, null,obj);
+		Message localMessage = new Message(MessageType.METHOD, "bind", newObj, argTypes, returnType, null, null,obj,null);
 		
 		this.setMessage(localMessage);
 		
-		Communication comm = new Communication(this.getHost(), this.getPort(), this);
+		RegistryCommunication comm = new RegistryCommunication(this.getHost(), this.getPort(), this);
 		Message returnMessage = comm.connect();
 		if(returnMessage.getMessageType() == MessageType.EXCEPTION){
 			try {
@@ -161,12 +164,12 @@ public class Registry_stub implements RegistryInterface,Serializable {
 		}
 		Class<?> returnType =method.getReturnType();
 		
-		Message localMessage = new Message(MessageType.METHOD, "unbind", newObj, argTypes, returnType, null, null,null);
+		Message localMessage = new Message(MessageType.METHOD, "unbind", newObj, argTypes, returnType, null, null,null,null);
 		
 		this.setMessage(localMessage);
 		
 		
-		Communication comm = new Communication(this.getHost(), this.getPort(), this);
+		RegistryCommunication comm = new RegistryCommunication(this.getHost(), this.getPort(), this);
 		Message returnMessage = comm.connect();
 		if(returnMessage.getMessageType() == MessageType.EXCEPTION){
 			try {
@@ -223,13 +226,13 @@ public class Registry_stub implements RegistryInterface,Serializable {
 		}
 		Class<?> returnType =method.getReturnType();
 		
-		Message localMessage = new Message(MessageType.METHOD, "rebind", newObj, argTypes, returnType, null, null,obj);
+		Message localMessage = new Message(MessageType.METHOD, "rebind", newObj, argTypes, returnType, null, null,obj,null);
 		
 		this.setMessage(localMessage);
 
 	
 		
-		Communication comm = new Communication(this.getHost(), this.getPort(), this);
+		RegistryCommunication comm = new RegistryCommunication(this.getHost(), this.getPort(), this);
 		Message returnMessage = comm.connect();
 		if(returnMessage.getMessageType() == MessageType.EXCEPTION){
 			try {
@@ -281,13 +284,13 @@ public myRemoteInterface lookUp(String name) {
 	}
 	Class<?> returnType =method.getReturnType();
 	
-	Message localMessage = new Message(MessageType.METHOD, "lookUp", newObj, argTypes, returnType, null, null,null);
+	Message localMessage = new Message(MessageType.METHOD, "lookUp", newObj, argTypes, returnType, null, null,null,null);
 	
 	this.setMessage(localMessage);
 
 
 	
-	Communication comm = new Communication(this.getHost(), this.getPort(), this);
+	RegistryCommunication comm = new RegistryCommunication(this.getHost(), this.getPort(), this);
 	Message returnMessage = comm.connect();
 	RemoteObjectRef ref = null;
 	
@@ -305,19 +308,24 @@ public myRemoteInterface lookUp(String name) {
 		ref = (RemoteObjectRef) returnMessage.getReturnValue();
 	}
 
+	String constructorArgument =  this.getBindName();
+	RemoteObjectRef sendRor = ref;
+	
+	Object[] x = {constructorArgument,sendRor};
+	
+	
 	Class<?> stubClass = null;
+	myRemoteInterface myinterfaceObject =null;
 	try {
 		System.out.println("serverStub class name "+ ref.getClass_Name());
 		stubClass = Class.forName(ref.getClass_Name()+"_stub");
-	} catch (ClassNotFoundException e) {
+		Constructor<?> constructor = stubClass.getConstructor(String.class,RemoteObjectRef.class);
+		myinterfaceObject = (myRemoteInterface)constructor.newInstance(x);
+	} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 		e.printStackTrace();
 	}
-	myRemoteInterface myinterfaceObject =null;
-	try {
-		myinterfaceObject = (myRemoteInterface) stubClass.newInstance();
-	} catch (InstantiationException | IllegalAccessException e) {
-		e.printStackTrace();
-	}
+
+
 	
 	return myinterfaceObject;
 	

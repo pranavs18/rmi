@@ -8,13 +8,13 @@ import java.net.Socket;
 import registry.RegistryInterface;
 import registry.Registry_stub;
 
-public class Communication {
+public class RegistryCommunication {
 
 	String host;
 	Integer port;
 	Object stubObject;
 	
-	public Communication(String host, Integer port, Object stubObject){
+	public RegistryCommunication(String host, Integer port, Object stubObject){
 		
 		this.host = host;
 		this.port = port;
@@ -23,7 +23,7 @@ public class Communication {
 	
 	public Message connect(){
 		
-		Message message = new Message(null, null, null, null, null, null, null, null);
+		Message message = new Message(null, null, null, null, null, null, null, null,null);
 		Socket connectionToServer = null;
 		//Add locate registry
 		try {

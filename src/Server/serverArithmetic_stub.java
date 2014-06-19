@@ -1,15 +1,15 @@
 package Server;
 
-import generics.Communication;
+import generics.ClientServerCommunication;
 import generics.Message;
 import generics.MessageType;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
+
+import registry.RemoteObjectRef;
 
 public class serverArithmetic_stub implements serverArithmeticInterface, Serializable {
 
@@ -19,8 +19,26 @@ public class serverArithmetic_stub implements serverArithmeticInterface, Seriali
     String host ;
 	Integer port;
     Message message;
+    String lookupName;
+    RemoteObjectRef ror;
     
-    public Message getMessage() {
+    public RemoteObjectRef getRor() {
+		return ror;
+	}
+	public serverArithmetic_stub(){
+    	
+    }
+    public serverArithmetic_stub(String lookupName, RemoteObjectRef ror){
+    	this.lookupName = lookupName;
+    	this.ror = ror;
+    }
+    
+    public String getLookupName() {
+		return lookupName;
+	}
+
+
+	public Message getMessage() {
 		return message;
 	}
    
@@ -38,8 +56,12 @@ public class serverArithmetic_stub implements serverArithmeticInterface, Seriali
 	public void setMessage(Message message) {
 		this.message = message;
 	}
+	
+	
 	@Override
-	public int add(int firstNumber, int secondNumber) {
+	public int divide(int firstNumber, int secondNumber) {
+		
+		System.out.println("Boooya Booyah" + this.getLookupName());
 		this.firstArgument = firstNumber;
 		this.secondArgument = secondNumber;
 		try {
@@ -74,18 +96,18 @@ public class serverArithmetic_stub implements serverArithmeticInterface, Seriali
        
 		
 		try {
-			method = thisClass.getMethod("add", argTypes);
+			method = thisClass.getMethod("divide", argTypes);
 		} catch (NoSuchMethodException | SecurityException e) {
 			
 			e.printStackTrace();
 		}
 		Class<?> returnType =method.getReturnType();
 		
-		Message localMessage = new Message(MessageType.METHOD, "add", newObj, argTypes, returnType, null, null,null);
+		Message localMessage = new Message(MessageType.METHOD, "divide", newObj, argTypes, returnType, null, null,this.getRor(),this.getLookupName());
 		
 		this.setMessage(localMessage);
 		System.out.println("Host port "+this.host+" "+this.port);
-		Communication comm = new Communication(this.getHost(), this.getPort(), this);
+		ClientServerCommunication comm = new ClientServerCommunication(this.getHost(), this.getPort(), this.getMessage());
 		Message returnMessage = comm.connect();
 		if(returnMessage.getMessageType() == MessageType.EXCEPTION){
 			try {
@@ -95,10 +117,11 @@ public class serverArithmetic_stub implements serverArithmeticInterface, Seriali
 			}
 		}
 		else if(returnMessage.getMessageType() == MessageType.RETURN) {
-			retValue = returnMessage.getReturnValue().toString();
+			retValue = returnMessage.getReturnValue();
+			return (int)retValue;
 		}
 		
-		return (int)retValue;
+		return 0;
 		
 	}
 
@@ -123,7 +146,7 @@ public class serverArithmetic_stub implements serverArithmeticInterface, Seriali
 	}
 
 	@Override
-	public int divide(int firstNumber, int secondNumber) {
+	public int add(int firstNumber, int secondNumber) {
 		
 		return 0;
 	}
