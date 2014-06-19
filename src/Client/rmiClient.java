@@ -1,11 +1,10 @@
 package Client;
 
 import generics.Naming;
+import generics.serverArithmeticInterface;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-
-import Server.serverArithmeticInterface;
 
 public class rmiClient implements Runnable{
 
@@ -25,10 +24,33 @@ public class rmiClient implements Runnable{
 		retVal = remoteObject.divide(20, 3);
 		System.out.println("Division of 2 numbers : "+ retVal);
 	} catch (Exception e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	}
-	   
+	  
+	try {
+		retVal = remoteObject.add(20, 3);
+		System.out.println("addition of 2 numbers : "+ retVal);
+	} catch (Exception e) {
+		
+		e.printStackTrace();
+	}
+	  
+	try {
+		retVal = remoteObject.multiply(20, 3);
+		System.out.println("multiplication of 2 numbers : "+ retVal);
+	} catch (Exception e) {
+		
+		e.printStackTrace();
+	}
+	  
+	try {
+		retVal = remoteObject.subtract(20, 3);
+		System.out.println("subtraction of 2 numbers : "+ retVal);
+	} catch (Exception e) {
+	
+		e.printStackTrace();
+	}
 	   
 	}
 	@Override

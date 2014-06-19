@@ -1,5 +1,7 @@
 package Server;
 
+import generics.serverArithmeticInterface;
+
 public class serverArithmetic implements serverArithmeticInterface {
 	private int firstNumber;
 	private int secondNumber;

@@ -1,6 +1,5 @@
-package Server;
+package generics;
 
-import generics.myRemoteInterface;
 
 public interface serverArithmeticInterface extends myRemoteInterface{
 	public int add(int firstNumber, int secondNumber);
