@@ -2,12 +2,14 @@ package Client;
 
 import generics.ConcatenationInterface;
 import generics.FinalCompilerTestInterface;
+import generics.MixbagTestInterface;
 import generics.Naming;
 import generics.serverArithmeticInterface;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RMIClient3 implements Runnable{
 
@@ -22,19 +24,15 @@ public class RMIClient3 implements Runnable{
 	   public void startrmiClient(String ServerIp, int ServerPort) throws UnknownHostException, IOException, InterruptedException{
 
 		  
-		   FinalCompilerTestInterface myfinalTest = (FinalCompilerTestInterface)Naming.lookUp("rmi://128.237.191.229:1099/finaltest");
-		   String retVal = null;
-		try {
-			retVal = myfinalTest.hello();
-			System.out.println("Concat value : "+ retVal);
-			
-			ArrayList<Integer> result1 = myfinalTest.arrayWorld(100);
-			System.out.println(result1);
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-		}
-		   
+		  MixbagTestInterface mix = (MixbagTestInterface)Naming.lookUp("//128.237.191.229:1099/mix");
+		  
+		  mix.hello();
+		  Float result = mix.divide(100F, 2.0F, 3.0F);
+		  System.out.println("Float result= "+result);
+		  
+		  HashMap<String,Integer> hamap = new HashMap<String, Integer>();
+		  hamap = mix.has("Vsk", 1);
+		  System.out.println("hashmap result= "+hamap);
 	}
 		@Override
 		public void run() {

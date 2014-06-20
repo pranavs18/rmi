@@ -200,14 +200,26 @@ public class rmic {
 									+ "}"
 									+ "}"
 									+ "else if(returnMessage.getMessageType() == MessageType.RETURN) {\n"
-									+ "retValue = returnMessage.getReturnValue();\n"
-									+ "return ("+returntype+")retValue;\n"
-									+ "}\n";
+									+ "retValue = returnMessage.getReturnValue();\n";
+									if(returntype.equals("void")){
+										temp1 = temp1+"";
+									}
+									else{
+									temp1 =temp1+ "return ("+returntype+")retValue;\n";
+									}
+									
+									
+									temp1+= "}\n";
 									if(returntype.equals("int")||returntype.equals("float")||returntype.equals("double")){
 									temp1 = temp1+"return 0;\n}\n";
 									}
-									else if(returntype.equals("char"))
+									else if(returntype.equals("char")){
 										temp1 = temp1+"return '0';\n}\n";
+									}
+									else if (returntype.equals("void")){
+										temp1 = temp1+"}\n";
+									}
+									
 									else{
 										temp1 = temp1+"return null;\n}\n";
 										

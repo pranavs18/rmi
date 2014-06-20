@@ -29,11 +29,13 @@ public class remoteServer implements Runnable,Serializable{
 		serverArithmetic serAr = new serverArithmetic();
 		ConcatenationImpl concat = new ConcatenationImpl();
 		FinalCompilerTest finalTest = new FinalCompilerTest();
+		MixBagTest mix = new MixBagTest();
 		try {
 			
 		 Naming.bind("//128.237.191.229:1099/test1", serAr);
 		 Naming.rebind("//128.237.191.229:1099/test2", concat);
 		 Naming.rebind("//128.237.191.229:1099/finaltest", finalTest);
+		 Naming.rebind("//128.237.191.229:1099/mix", mix);
 		
 		} catch (AlreadyBoundException | RemoteException e) {
 			
