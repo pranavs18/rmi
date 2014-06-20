@@ -58,32 +58,36 @@ public class ConnectClient {
 						Object newObj[] = new Object[msg.getArguments().length];
 						newObj = msg.getArguments();		
 
-						Class<?>[] argTypes = new Class[newObj.length];
-						for (int i = 0; i < newObj.length; i++) {
+//						Class<?>[] argTypes = new Class[newObj.length];
+//						for (int i = 0; i < newObj.length; i++) {
+//
+//							argTypes[i] = newObj[i].getClass();
+//
+//							if(!argTypes[i].isPrimitive()){
+//
+//								if(argTypes[i].equals(Integer.class)){
+//									argTypes[i]= int.class;
+//								}
+//								else if(argTypes[i].equals(Float.class)){
+//									argTypes[i] = float.class;
+//								}
+//								else if(argTypes[i].equals(Double.class)){
+//									argTypes[i] = double.class;
+//
+//								}
+//								else if(argTypes[i].equals(Long.class)){
+//									argTypes[i] = long.class;
+//								}
+//							}
+//
+//						} 
 
-							argTypes[i] = newObj[i].getClass();
-
-							if(!argTypes[i].isPrimitive()){
-
-								if(argTypes[i].equals(Integer.class)){
-									argTypes[i]= int.class;
-								}
-								else if(argTypes[i].equals(Float.class)){
-									argTypes[i] = float.class;
-								}
-								else if(argTypes[i].equals(Double.class)){
-									argTypes[i] = double.class;
-
-								}
-								else if(argTypes[i].equals(Long.class)){
-									argTypes[i] = long.class;
-								}
-							}
-
-						} 
-
-
-						method = thisClass.getMethod(msg.getMethodName(), argTypes);
+						if(msg.getArgTypes().length>0){
+						method = thisClass.getMethod(msg.getMethodName(), msg.getArgTypes());
+						}
+						else{
+							method = thisClass.getMethod(msg.getMethodName());
+						}
 						try {
 							returnValue = method.invoke(o, newObj);
 

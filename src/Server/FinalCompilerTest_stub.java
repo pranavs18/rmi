@@ -1,6 +1,6 @@
 package Server; 
 import generics.Communication; 
-import generics.ConcatenationInterface; 
+import generics.FinalCompilerTestInterface; 
 import generics.Message;
 import generics.MessageType;
 import java.io.Serializable;
@@ -9,16 +9,16 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import registry.RemoteException;
 import registry.RemoteObjectRef;
-public class ConcatenationImpl_stub implements generics.ConcatenationInterface, Serializable{
+public class FinalCompilerTest_stub implements generics.FinalCompilerTestInterface, Serializable{
 private static final long serialVersionUID = 1L;
 String host ;
 Integer port;
 Message message;
 String lookupName;
 RemoteObjectRef ror;
-public ConcatenationImpl_stub(){
+public FinalCompilerTest_stub(){
 }
-public ConcatenationImpl_stub(String lookupName, RemoteObjectRef ror){
+public FinalCompilerTest_stub(String lookupName, RemoteObjectRef ror){
 this.lookupName = lookupName;
 this.ror = ror;
 }
@@ -53,7 +53,7 @@ public void setRor(RemoteObjectRef ror) {
 this.ror = ror;
 }
 @Override
-public java.lang.String concat(java.lang.String a1,java.lang.String a2) throws registry.RemoteException{
+public java.util.ArrayList arrayWorld(java.lang.Integer a1){
 try {this.setHost(InetAddress.getLocalHost().getHostAddress());
 } catch (UnknownHostException e2) {
 e2.printStackTrace();
@@ -66,11 +66,10 @@ thisClass = Class.forName(this.getClass().getCanonicalName());
 e1.printStackTrace();
 }
 Method method = null;
-Object newObj[] = new Object[2];
+Object newObj[] = new Object[1];
 newObj[0] = a1;
-newObj[1] = a2;
-String[] parameterString ={"java.lang.String","java.lang.String"};
-Class<?>[] argTypes = new Class[2];
+String[] parameterString ={"java.lang.Integer"};
+Class<?>[] argTypes = new Class[1];
 for (int i = 0; i < newObj.length; i++) {
 if(parameterString[i].equals("int")){
 argTypes[i] = Integer.TYPE;
@@ -101,12 +100,12 @@ else{
 }
 }
 try {
-method = thisClass.getMethod("concat", argTypes);
+method = thisClass.getMethod("arrayWorld", argTypes);
 } catch (NoSuchMethodException | SecurityException e) {
 e.printStackTrace();
 }
 Class<?> returnType =method.getReturnType();
-Message localMessage = new Message(MessageType.METHOD, "concat", newObj, argTypes, returnType, null, null,this.getRor(),this.getLookupName());
+Message localMessage = new Message(MessageType.METHOD, "arrayWorld", newObj, argTypes, returnType, null, null,this.getRor(),this.getLookupName());
 this.setMessage(localMessage);
 Communication comm = new Communication(this.getHost(), this.getPort(), this);
 Message returnMessage = comm.connect();
@@ -116,12 +115,12 @@ try {throw new Exception(returnMessage.getException());
 e.printStackTrace();
 }}else if(returnMessage.getMessageType() == MessageType.RETURN) {
 retValue = returnMessage.getReturnValue();
-return (java.lang.String)retValue;
+return (java.util.ArrayList)retValue;
 }
 return null;
 }
 @Override
-public java.lang.String concatWithInt(java.lang.String a1,int a2){
+public java.lang.String hello(){
 try {this.setHost(InetAddress.getLocalHost().getHostAddress());
 } catch (UnknownHostException e2) {
 e2.printStackTrace();
@@ -134,11 +133,9 @@ thisClass = Class.forName(this.getClass().getCanonicalName());
 e1.printStackTrace();
 }
 Method method = null;
-Object newObj[] = new Object[2];
-newObj[0] = a1;
-newObj[1] = a2;
-String[] parameterString ={"java.lang.String","int"};
-Class<?>[] argTypes = new Class[2];
+Object newObj[] = new Object[0];
+String[] parameterString ={};
+Class<?>[] argTypes = new Class[0];
 for (int i = 0; i < newObj.length; i++) {
 if(parameterString[i].equals("int")){
 argTypes[i] = Integer.TYPE;
@@ -169,12 +166,12 @@ else{
 }
 }
 try {
-method = thisClass.getMethod("concatWithInt", argTypes);
+method = thisClass.getMethod("hello", argTypes);
 } catch (NoSuchMethodException | SecurityException e) {
 e.printStackTrace();
 }
 Class<?> returnType =method.getReturnType();
-Message localMessage = new Message(MessageType.METHOD, "concatWithInt", newObj, argTypes, returnType, null, null,this.getRor(),this.getLookupName());
+Message localMessage = new Message(MessageType.METHOD, "hello", newObj, argTypes, returnType, null, null,this.getRor(),this.getLookupName());
 this.setMessage(localMessage);
 Communication comm = new Communication(this.getHost(), this.getPort(), this);
 Message returnMessage = comm.connect();

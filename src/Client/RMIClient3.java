@@ -1,17 +1,19 @@
 package Client;
 
 import generics.ConcatenationInterface;
+import generics.FinalCompilerTestInterface;
 import generics.Naming;
 import generics.serverArithmeticInterface;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
-public class RMIClient2 implements Runnable{
+public class RMIClient3 implements Runnable{
 
 		String ServerIp;
 		static int ServerPort = 9999;
-	   public RMIClient2(String ServerIp){
+	   public RMIClient3(String ServerIp){
 			
 			this.ServerIp = ServerIp;
 					
@@ -19,15 +21,15 @@ public class RMIClient2 implements Runnable{
 	   
 	   public void startrmiClient(String ServerIp, int ServerPort) throws UnknownHostException, IOException, InterruptedException{
 
-		   serverArithmeticInterface remoteObject = (serverArithmeticInterface)Naming.lookUp("rmi://128.237.191.229:1099/test1");
-		   ConcatenationInterface c = (ConcatenationInterface)Naming.lookUp("rmi://128.237.191.229:1099/test2");
+		  
+		   FinalCompilerTestInterface myfinalTest = (FinalCompilerTestInterface)Naming.lookUp("rmi://128.237.191.229:1099/finaltest");
 		   String retVal = null;
 		try {
-			retVal = c.concatWithInt("Hello", 4);
+			retVal = myfinalTest.hello();
 			System.out.println("Concat value : "+ retVal);
-			int result = 0;
-			result = remoteObject.add((int)1000, (int)200);
-			System.out.println(result);
+			
+			ArrayList<Integer> result1 = myfinalTest.arrayWorld(100);
+			System.out.println(result1);
 		} catch (Exception e) {
 			
 			e.printStackTrace();
@@ -53,7 +55,7 @@ public class RMIClient2 implements Runnable{
 			
 			String ServerIp = args[0];		
 		
-			RMIClient2 client = new RMIClient2(ServerIp);
+			RMIClient3 client = new RMIClient3(ServerIp);
 			
 			// Starts worker host thread
 			new Thread(client).start();

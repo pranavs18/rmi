@@ -28,10 +28,12 @@ public class remoteServer implements Runnable,Serializable{
 	
 		serverArithmetic serAr = new serverArithmetic();
 		ConcatenationImpl concat = new ConcatenationImpl();
+		FinalCompilerTest finalTest = new FinalCompilerTest();
 		try {
 			
-		 Naming.bind("//127.0.0.1:1099/test1", serAr);
-		 Naming.rebind("//127.0.0.1:1099/test2", concat);
+		 Naming.bind("//128.237.191.229:1099/test1", serAr);
+		 Naming.rebind("//128.237.191.229:1099/test2", concat);
+		 Naming.rebind("//128.237.191.229:1099/finaltest", finalTest);
 		
 		} catch (AlreadyBoundException | RemoteException e) {
 			
