@@ -30,12 +30,14 @@ public class remoteServer implements Runnable,Serializable{
 		ConcatenationImpl concat = new ConcatenationImpl();
 		FinalCompilerTest finalTest = new FinalCompilerTest();
 		MixBagTest mix = new MixBagTest();
+		findMaxElement max = new findMaxElement();
 		try {
 			
-		 Naming.bind("//128.237.191.229:1099/test1", serAr);
-		 Naming.rebind("//128.237.191.229:1099/test2", concat);
-		 Naming.rebind("//128.237.191.229:1099/finaltest", finalTest);
-		 Naming.rebind("//128.237.191.229:1099/mix", mix);
+		 Naming.bind("//128.237.190.47:1099/test1", serAr);
+		 Naming.rebind("//128.237.190.47:1099/test2", concat);
+		 Naming.rebind("//128.237.190.47:1099/finaltest", finalTest);
+		 Naming.rebind("//128.237.190.47:1099/mix", mix);
+		 Naming.rebind("//128.237.190.47:1099/max", max);
 		
 		} catch (AlreadyBoundException | RemoteException e) {
 			
