@@ -115,24 +115,31 @@ public class Naming{
 		
 	}
 	
-	public ArrayList<String> list(String name){
+	@SuppressWarnings("unchecked")
+	public static ArrayList<String> listObjects(String name){
+		RegistryInterface stub = null;
+		try{
+			stub = (RegistryInterface)Class.forName("registry.Registry_stub").newInstance();
+		}catch (InstantiationException | IllegalAccessException
+				| ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 		
-		
-		return null;
-		
-		
-		
+		return (ArrayList<String>)stub.listObjects(name);
+			
 	}
+	
 	public static String parseHostPort(String fullName){
 		
 		String newName = fullName.trim();
-		
+		String name = "";
 		int indexOfSlash1 = newName.indexOf("/");
 		int indexOfColon = newName.indexOf(":",indexOfSlash1);
 		int indexOfSlash2 = newName.indexOf("/", indexOfColon);
 		String host = newName.substring(indexOfSlash1+2, indexOfColon);
 		String port = newName.substring(indexOfColon+1,indexOfSlash2);
-		String name = newName.substring(indexOfSlash2+1);
+		if(indexOfSlash2 +1 < fullName.length())
+			  name = newName.substring(indexOfSlash2+1);
 		String finalString = host+" "+port+" "+name;
 		return finalString;
 	}

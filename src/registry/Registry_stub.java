@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 
-public class Registry_stub implements RegistryInterface,Serializable {
+ public class Registry_stub implements RegistryInterface,Serializable {
 
 	
 	public Registry_stub() {
@@ -331,9 +331,66 @@ public myRemoteInterface lookUp(String name) {
 	
 }
 
+@SuppressWarnings("unchecked")
 @Override
-public ArrayList<String> listObjects() {
-	return null;
+public ArrayList<String> listObjects(String name) {
+	String hostPortName = this.parseHostPort(name);
+	String arguments[] = null;
+	arguments = hostPortName.split(" ");
+	System.out.println(arguments);  //remove
+	this.setHost(arguments[0]);
+	this.setPort(Integer.parseInt(arguments[1]));
+	
+	Class<?> thisClass = null;
+	try {
+		thisClass = Class.forName(this.getClass().getCanonicalName());
+	} catch (ClassNotFoundException e1) {
+		
+		e1.printStackTrace();
+	}
+	
+	Object newObj[] = new Object[1];
+	newObj[0] = name;
+	
+	Class<?>[] argTypes = new Class[newObj.length];
+	for (int i = 0; i < newObj.length; i++) {
+		argTypes[i] = newObj[i].getClass();
+	} 
+
+	Method method = null;
+	try {
+		method = thisClass.getMethod("listObjects", argTypes);
+	} catch (NoSuchMethodException | SecurityException e) {
+		
+		e.printStackTrace();
+	}
+	Class<?> returnType =method.getReturnType();
+	
+	Message localMessage = new Message(MessageType.METHOD, "listObjects", newObj, argTypes, returnType, null, null,null,null);
+	
+	this.setMessage(localMessage);
+
+
+	
+	Communication comm = new Communication(this.getHost(), this.getPort(), this);
+	Message returnMessage = comm.connect();
+	ArrayList<String> ref = null;
+	
+	
+	if(returnMessage.getMessageType() == MessageType.EXCEPTION){
+		try {
+			throw new Exception(returnMessage.getException());
+		} catch (Exception e) {
+			System.out.println("Exception returned ");
+			e.printStackTrace();
+		}
+	}
+	
+	else if(returnMessage.getMessageType() == MessageType.RETURN) {
+		ref = (ArrayList<String>) returnMessage.getReturnValue();
+	}
+	
+	return ref;
 }
 	
 
@@ -341,12 +398,14 @@ public ArrayList<String> listObjects() {
 public String parseHostPort(String fullName){
 	
 	String newName = fullName.trim();
+	String name = "";
 	int indexOfSlash1 = newName.indexOf("/");
 	int indexOfColon = newName.indexOf(":",indexOfSlash1);
 	int indexOfSlash2 = newName.indexOf("/", indexOfColon);
 	String host = newName.substring(indexOfSlash1+2, indexOfColon);
 	String port = newName.substring(indexOfColon+1,indexOfSlash2);
-	String name = newName.substring(indexOfSlash2+1);
+	if(indexOfSlash2 +1 < fullName.length())
+		  name = newName.substring(indexOfSlash2+1);
 	String finalString = host+" "+port+" "+name;
 	return finalString;
 }

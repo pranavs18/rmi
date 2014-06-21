@@ -7,9 +7,9 @@ import generics.myRemoteInterface;
 
 public interface RegistryInterface extends myRemoteInterface{
 
-    void bind(String name, RemoteObjectRef obj) throws  AlreadyBoundException, RemoteException;
-    String unbind(String name) throws RemoteException, NotBoundException;
-    void rebind(String name, RemoteObjectRef obj) throws RemoteException, AlreadyBoundException;
+    public void bind(String name, RemoteObjectRef obj) throws  AlreadyBoundException, RemoteException;
+    public String unbind(String name) throws RemoteException, NotBoundException;
+    public void rebind(String name, RemoteObjectRef obj) throws RemoteException, AlreadyBoundException;
     
     public String getBindName();
 	public void setBindName(String bindName);
@@ -20,8 +20,8 @@ public interface RegistryInterface extends myRemoteInterface{
 	public Message getMessage();
 	public void setMessage(Message message);
 	
-	myRemoteInterface lookUp(String name);
-	ArrayList<String> listObjects();
+	public myRemoteInterface lookUp(String name);
+	public ArrayList<String> listObjects(String name);
 	
 	
     

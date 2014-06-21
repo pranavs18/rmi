@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+
 public class Registry implements RegistryInterface, Runnable {
 	
 	public final static int registry_port = 1099;
@@ -103,7 +104,8 @@ public class Registry implements RegistryInterface, Runnable {
 	}
 
 	@Override
-	public ArrayList<String> listObjects() {
+	public ArrayList<String> listObjects(String name) {
+		System.out.println("listObjects invoked.... ");
 		ArrayList<String> al = new ArrayList<String>();
 		for(Entry<String,RemoteObjectRef> e: regMap.entrySet()){
 		al.add(e.getKey());
@@ -237,6 +239,7 @@ public static void main(String[] args) throws UnknownHostException{
 		String Registry_IP = args[0]; 
 		Registry reg = new Registry(Registry_IP,registry_port);	
 		System.out.println("Starting registry on host " + Registry_IP + " and port " + registry_port);
+		
 		new Thread(reg).start();
 	}
 

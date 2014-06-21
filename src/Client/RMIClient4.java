@@ -4,9 +4,13 @@ package Client;
 
 import generics.Naming;
 import generics.findMaxElementInterface;
+
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Map.Entry;
+
+import registry.RemoteObjectRef;
 
 
 public class RMIClient4 implements Runnable{
@@ -23,6 +27,13 @@ public class RMIClient4 implements Runnable{
 
 	  
 	  findMaxElementInterface max = (findMaxElementInterface)Naming.lookUp("//128.237.190.47:1099/max");
+	  ArrayList<String> objectList = new ArrayList<String>();
+	  objectList = Naming.listObjects("//128.237.190.47:1099/"); 
+	  System.out.println("LIST OF OBJECTS");
+	  
+	  for(int i=0;i< objectList.size();i++){
+		  System.out.println(objectList.get(i));
+	  }
 	  
 	  ArrayList<Integer> al = new ArrayList<Integer>();
 	  System.out.println("Given ArrayList - ");
