@@ -1,4 +1,4 @@
-package Server;
+package generics;
 
 import java.util.concurrent.ConcurrentHashMap;
 

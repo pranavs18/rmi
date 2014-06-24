@@ -18,10 +18,10 @@ public class rmiClient implements Runnable{
    
    public void startrmiClient(String ServerIp, int ServerPort) throws UnknownHostException, IOException, InterruptedException{
 
-	   serverArithmeticInterface remoteObject = (serverArithmeticInterface)Naming.lookUp("rmi://127.0.0.1:1099/test1");
+	   serverArithmeticInterface remoteObject = (serverArithmeticInterface)Naming.lookUp("rmi://128.2.13.144:1099/test1");
 	   int retVal = 0;
 	try {
-		retVal = remoteObject.divide(20, 3);
+		retVal = remoteObject.divide(20, 0);
 		System.out.println("Division of 2 numbers : "+ retVal);
 	} catch (Exception e) {
 		

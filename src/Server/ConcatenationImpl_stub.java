@@ -54,10 +54,7 @@ this.ror = ror;
 }
 @Override
 public java.lang.String concat(java.lang.String a1,java.lang.String a2) throws registry.RemoteException{
-try {this.setHost(InetAddress.getLocalHost().getHostAddress());
-} catch (UnknownHostException e2) {
-e2.printStackTrace();
-}
+this.setHost(this.getRor().getIP_adr());
 this.setPort(9999);Object retValue = null;
 Class<?> thisClass = null;
 try {
@@ -122,10 +119,7 @@ return null;
 }
 @Override
 public java.lang.String concatWithInt(java.lang.String a1,int a2){
-try {this.setHost(InetAddress.getLocalHost().getHostAddress());
-} catch (UnknownHostException e2) {
-e2.printStackTrace();
-}
+this.setHost(this.getRor().getIP_adr());
 this.setPort(9999);Object retValue = null;
 Class<?> thisClass = null;
 try {

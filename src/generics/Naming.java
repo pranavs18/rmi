@@ -5,7 +5,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import Server.ObjectMap;
 import registry.AlreadyBoundException;
 import registry.NotBoundException;
 import registry.RegistryInterface;
@@ -19,6 +18,7 @@ public class Naming{
 		String ip = null;
 		try {
 			ip = InetAddress.getLocalHost().getHostAddress();
+                        System.out.println("IP ADDRESS PASSED - "+ ip);
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
@@ -71,6 +71,7 @@ public class Naming{
 		String ip = null;
 		try {
 			ip = InetAddress.getLocalHost().getHostAddress();
+                        System.out.println("IP ADDRESS PASSED " + ip);
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}

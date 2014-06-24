@@ -125,11 +125,10 @@ public class rmic {
 			}
 			temp1 = "@Override\n"+temp1.replaceFirst(stringToChange, changedString) + "{\n";
 			
-			temp1 = temp1+"try {"
-					+ "this.setHost(InetAddress.getLocalHost().getHostAddress());\n"
-					+ "} catch (UnknownHostException e2) {\n"
-					+ "e2.printStackTrace();\n"
-					+ "}\n"
+			temp1 = temp1
+			+ "this.setHost(this.getRor().getIP_adr());\n"
+				
+				
 					+ "this.setPort(9999);Object retValue = null;\n"
 					+ "Class<?> thisClass = null;\n"
 					+ "try {\n"
@@ -278,7 +277,8 @@ public static void main(String[] args){
 		
 		System.out.println("helooooooo" + jCompiler);
 		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
-		StandardJavaFileManager fileMngr = jCompiler.getStandardFileManager(null, null, null);
+		
+                StandardJavaFileManager fileMngr = jCompiler.getStandardFileManager(null, null, null);
 		Boolean b = jCompiler.getTask(null, fileMngr, diagnostics, null, null, fileMngr.getJavaFileObjectsFromFiles(Arrays.asList(file))).call();
 		System.out.println(b);
 		

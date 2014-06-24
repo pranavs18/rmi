@@ -19,8 +19,8 @@ public class RMIClient2 implements Runnable{
 	   
 	   public void startrmiClient(String ServerIp, int ServerPort) throws UnknownHostException, IOException, InterruptedException{
 
-		   serverArithmeticInterface remoteObject = (serverArithmeticInterface)Naming.lookUp("rmi://128.237.191.229:1099/test1");
-		   ConcatenationInterface c = (ConcatenationInterface)Naming.lookUp("rmi://128.237.191.229:1099/test2");
+		   serverArithmeticInterface remoteObject = (serverArithmeticInterface)Naming.lookUp("rmi://128.2.13.144:1099/test1");
+		   ConcatenationInterface c = (ConcatenationInterface)Naming.lookUp("rmi://128.2.13.144:1099/test2");
 		   String retVal = null;
 		try {
 			retVal = c.concatWithInt("Hello", 4);

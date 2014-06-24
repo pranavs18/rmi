@@ -26,9 +26,9 @@ public class RMIClient4 implements Runnable{
    public void startrmiClient(String ServerIp, int ServerPort) throws UnknownHostException, IOException, InterruptedException{
 
 	  
-	  findMaxElementInterface max = (findMaxElementInterface)Naming.lookUp("//128.237.190.47:1099/max");
+	  findMaxElementInterface max = (findMaxElementInterface)Naming.lookUp("//128.2.13.144:1099/max");
 	  ArrayList<String> objectList = new ArrayList<String>();
-	  objectList = Naming.listObjects("//128.237.190.47:1099/"); 
+	  objectList = Naming.listObjects("//128.2.13.144:1099/"); 
 	  System.out.println("LIST OF OBJECTS");
 	  
 	  for(int i=0;i< objectList.size();i++){
