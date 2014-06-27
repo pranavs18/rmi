@@ -1,15 +1,21 @@
+/*
+ * Id: vsureshk, pranavsa
+ * Authors: Vaibhav Suresh Kumar & Pranav Saxena
+ */
+
+
 package generics;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ObjectMap {
 	
-	private static ConcurrentHashMap<String, Object> objectMap = new ConcurrentHashMap<String, Object>();
+/* Map for storing actual object on client side to invoke a method */
+private static ConcurrentHashMap<String, Object> objectMap = new ConcurrentHashMap<String, Object>();
 
 public static void insertIntoServerMap(String key, Object obj){
 	
 	objectMap.put(key, obj);
-	System.out.println("Key "+key+" Value"+obj.toString());
 	
 }
 	

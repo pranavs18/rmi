@@ -1,3 +1,8 @@
+/*
+ * Id: vsureshk, pranavsa
+ * Authors: Vaibhav Suresh Kumar & Pranav Saxena
+ */
+
 package Server;
 
 import generics.Message;
@@ -14,7 +19,7 @@ import generics.ObjectMap;
 
 public class ConnectClient {
 
-
+//Our server accepts connection on port 9999
 	Integer port = 9999;
 	public void createConnection() throws IOException{
 		ServerSocket ss = null;
@@ -29,7 +34,7 @@ public class ConnectClient {
 					Object obj = null;
 					try {
 
-
+						//Object sent by the communication class of client is read
 						obj =ois.readObject();
 
 						Class<?> thisClass = null;
@@ -40,14 +45,13 @@ public class ConnectClient {
 						Method method = null;
 						Message returnMessage = null;
 
+						// The getMessage function is called to get the method details in message object
 						method = thisClass.getDeclaredMethod("getMessage", params);
 
 						msg = (Message)method.invoke(obj, (Object[])null);
 
 						String key = msg.getLookupName();
 						Object o = ObjectMap.getObjectFromKey(key);
-
-						System.out.println("key value "+ key +" "+ o.getClass().getCanonicalName());
 
 						thisClass = null;
 
@@ -59,36 +63,16 @@ public class ConnectClient {
 						Object newObj[] = new Object[msg.getArguments().length];
 						newObj = msg.getArguments();		
 
-//						Class<?>[] argTypes = new Class[newObj.length];
-//						for (int i = 0; i < newObj.length; i++) {
-//
-//							argTypes[i] = newObj[i].getClass();
-//
-//							if(!argTypes[i].isPrimitive()){
-//
-//								if(argTypes[i].equals(Integer.class)){
-//									argTypes[i]= int.class;
-//								}
-//								else if(argTypes[i].equals(Float.class)){
-//									argTypes[i] = float.class;
-//								}
-//								else if(argTypes[i].equals(Double.class)){
-//									argTypes[i] = double.class;
-//
-//								}
-//								else if(argTypes[i].equals(Long.class)){
-//									argTypes[i] = long.class;
-//								}
-//							}
-//
-//						} 
-
 						if(msg.getArgTypes().length>0){
 						method = thisClass.getMethod(msg.getMethodName(), msg.getArgTypes());
 						}
 						else{
 							method = thisClass.getMethod(msg.getMethodName());
 						}
+						
+						
+						// The method is invoked by providing the information in message class and the 
+						// result is returned using the same message object
 						try {
 							returnValue = method.invoke(o, newObj);
 
@@ -109,6 +93,7 @@ public class ConnectClient {
 
 						} catch (InvocationTargetException e) {
 
+							// if an exception is thrown it is returned using the same message object
 							Throwable cause = e.getCause();
 							returnMessage = new Message(MessageType.EXCEPTION, msg.getMethodName(), msg.getArguments(), msg.getArgTypes(), msg.getReturnType(), null, cause.getMessage(), msg.getRor(),null);
 

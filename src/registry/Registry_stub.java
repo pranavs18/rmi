@@ -1,3 +1,9 @@
+
+/*
+ * Id: vsureshk, pranavsa
+ * Authors: Vaibhav Suresh Kumar & Pranav Saxena
+ */
+
 package registry;
 
 import generics.Communication;
@@ -317,7 +323,6 @@ public myRemoteInterface lookUp(String name) {
 	Class<?> stubClass = null;
 	myRemoteInterface myinterfaceObject =null;
 	try {
-		System.out.println("serverStub class name "+ ref.getClass_Name());
 		stubClass = Class.forName(ref.getClass_Name()+"_stub");
 		Constructor<?> constructor = stubClass.getConstructor(String.class,RemoteObjectRef.class);
 		myinterfaceObject = (myRemoteInterface)constructor.newInstance(x);
@@ -337,7 +342,6 @@ public ArrayList<String> listObjects(String name) {
 	String hostPortName = this.parseHostPort(name);
 	String arguments[] = null;
 	arguments = hostPortName.split(" ");
-	System.out.println(arguments);  //remove
 	this.setHost(arguments[0]);
 	this.setPort(Integer.parseInt(arguments[1]));
 	

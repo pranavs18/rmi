@@ -1,4 +1,11 @@
+/*
+ * Id: vsureshk, pranavsa
+ * Authors: Vaibhav Suresh Kumar & Pranav Saxena
+ */
+
+
 package registry;
+
 import generics.Message;
 import generics.MessageType;
 import java.net.InetAddress;
@@ -33,7 +40,7 @@ public class Registry implements RegistryInterface, Runnable {
 		
 	}
 
-
+	// binds a name with the remoteObjectRef
 	public void bind(String name, RemoteObjectRef obj) throws AlreadyBoundException {
 		System.out.println("Binding method Invoked...");
 		
@@ -49,6 +56,7 @@ public class Registry implements RegistryInterface, Runnable {
 		
 	}
 	
+	// Unbind method unbinds a value stored in a map
     public String unbind(String name) throws RemoteException, NotBoundException{
     	System.out.println("Unbind method invoked");
     	
@@ -69,6 +77,7 @@ public class Registry implements RegistryInterface, Runnable {
     return unboundKey;
     }
     
+ // rebinds a name with the remoteObjectRef i.e replaces the value with new value
     public void rebind(String name, RemoteObjectRef obj) throws RemoteException, AlreadyBoundException{
    
         if(regMap.containsKey(name)){
@@ -89,7 +98,7 @@ public class Registry implements RegistryInterface, Runnable {
         	
     }
     
-    
+    // This method returns the object reference to the client for the corresponding name
     @Override
 	public RemoteObjectRef lookUp(String name) {
 		System.out.println("Lookup invoked with name "+ name);
@@ -98,11 +107,12 @@ public class Registry implements RegistryInterface, Runnable {
 		return value;
 		}
     	else{
-    	System.out.println("Null invoked");
 		return null;
     	}
 	}
-
+    
+    
+    //Returns a list of names in the registry map 
 	@Override
 	public ArrayList<String> listObjects(String name) {
 		System.out.println("listObjects invoked.... ");
@@ -217,8 +227,6 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 				
 			}
         	
-        	System.out.println(regMap);
-        	
         	regSocketInput.close();	
         }
        
@@ -229,8 +237,7 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 
 
 public static void main(String[] args) throws UnknownHostException{
-	
-	   
+
 		
 		String Registry_IP = InetAddress.getLocalHost().getHostAddress(); 
 		Registry reg = new Registry(Registry_IP,registry_port);	

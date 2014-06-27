@@ -1,3 +1,9 @@
+/*
+ * Id: vsureshk, pranavsa
+ * Authors: Vaibhav Suresh Kumar & Pranav Saxena
+ */
+
+
 package generics;
 
 import java.io.IOException;
@@ -13,12 +19,13 @@ import registry.RemoteObjectRef;
 
 public class Naming{
 
+	//This method calls the corresponding stub method
 	public static void bind(String name, myRemoteInterface obj) throws AlreadyBoundException, RemoteException, IOException {
 		String className = obj.getClass().getCanonicalName();
 		String ip = null;
 		try {
 			ip = InetAddress.getLocalHost().getHostAddress();
-                        //System.out.println("IP ADDRESS PASSED - "+ ip);
+                      
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
@@ -29,8 +36,6 @@ public class Naming{
 		RemoteObjectRef newRef = new RemoteObjectRef(ip, 9999,args[2] , className,"bind");
 		
 		ObjectMap.insertIntoServerMap(args[2], obj);
-		
-		System.out.println("Noooooooo "+obj.getClass().getCanonicalName()); //Remove
 		
 		RegistryInterface stub = null;
 		 try{
@@ -48,6 +53,7 @@ public class Naming{
 		
 	}
 
+	//This method calls the corresponding stub method
 	public static void unbind(String name) throws RemoteException, NotBoundException {
 		
 		
@@ -65,13 +71,14 @@ public class Naming{
 		
 	}
 
+	//This method calls the corresponding stub method
 	public static void rebind(String name, myRemoteInterface obj) throws RemoteException, AlreadyBoundException {
 	
 		String className = obj.getClass().getCanonicalName();
 		String ip = null;
 		try {
 			ip = InetAddress.getLocalHost().getHostAddress();
-                       // System.out.println("IP ADDRESS PASSED " + ip);
+                    
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
@@ -82,8 +89,6 @@ public class Naming{
 		RemoteObjectRef newRef = new RemoteObjectRef(ip, 9999,args[2] , className,"rebind");
 		
 		ObjectMap.insertIntoServerMap(args[2], obj);
-		
-		System.out.println("Noooooooo "+obj.getClass().getCanonicalName()); //Remove
 		
 		RegistryInterface stub = null;
 		 try{
@@ -102,6 +107,7 @@ public class Naming{
 		
 	}
 	
+	//This method calls the corresponding stub method
 	public static myRemoteInterface lookUp(String name){
 	
 		RegistryInterface stub = null;
@@ -116,6 +122,7 @@ public class Naming{
 		
 	}
 	
+	//This method calls the corresponding stub method
 	@SuppressWarnings("unchecked")
 	public static ArrayList<String> listObjects(String name){
 		RegistryInterface stub = null;
@@ -130,6 +137,8 @@ public class Naming{
 			
 	}
 	
+	
+	// Used to parse the host and port values which are of the form //host:port/name
 	public static String parseHostPort(String fullName){
 		
 		String newName = fullName.trim();

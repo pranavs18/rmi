@@ -1,3 +1,9 @@
+/*
+ * Id: vsureshk, pranavsa
+ * Authors: Vaibhav Suresh Kumar & Pranav Saxena
+ */
+
+
 package Server;
 
 import java.io.BufferedWriter;
@@ -5,9 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.Arrays;
-
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -16,13 +20,17 @@ import javax.tools.ToolProvider;
 
 public class rmic {
 	
+	
+	/* This function is used to append a strings which form the contents of the .java class for the stub */
 	void appendText(File file, Class<?> className){
 	
 		String oldClassName = className.getSimpleName();
 		String oldClassPackageName =className.getPackage().getName();
-		String extendImplements = "extends "+oldClassName;
 		String interfaceInherited = className.getInterfaces()[0].toString();
 		interfaceInherited = interfaceInherited.replaceFirst("^interface ","");
+		
+		/* These are import statements and initial strings. We require only the class name and interface implemented
+		 * which we have found from the server programs name and appended with _stub*/
 		String commonContent = "package " + oldClassPackageName+"; \n"
 			+"import generics.Communication; \n"
 			+ "import "+interfaceInherited+"; \n"
@@ -82,9 +90,8 @@ public class rmic {
 		
 		
 		
-		
+		/* here we find all the methods in the server program class and make the stub codes for it*/
 		Method methods[] =className.getDeclaredMethods();
-		System.out.println(methods);
 		String methodNameCorrection = oldClassPackageName+"."+oldClassName+"_stub.";
 	
 		for(int i = 0; i<methods.length;i++){
@@ -95,9 +102,9 @@ public class rmic {
 			String temp1 = currentMethod.toString().replaceAll(oldClassName, oldClassName+"_stub");
 			temp1 = temp1.replaceAll(methodNameCorrection, "");
 			
-			System.out.println("noa "+numberOfarguments+" methodName "+methodName+" returntype "+returntype+" funfirstline "+ temp1);
+			
 			String stringToChange =temp1.substring(temp1.indexOf("(")+1, temp1.indexOf(")"));
-			System.out.println("String to change "+stringToChange);
+			
 			
 			String parameterString ="";
 			String changedString = "";
@@ -121,7 +128,7 @@ public class rmic {
 			String apCounter =" "+"a"+counter++;
 	
 			changedString += tokens[tokens.length - 1]+ apCounter;
-			System.out.println("changed string "+changedString);
+			
 			}
 			temp1 = "@Override\n"+temp1.replaceFirst(stringToChange, changedString) + "{\n";
 			
@@ -229,6 +236,8 @@ public class rmic {
 		
 		commonContent = commonContent+methodContent;
 		
+		/* We write the contents of the string in the .java file specified 
+		 * which has the same name as the server Class appended with _stub*/ 
 		FileWriter fileWritter;
 		try {
 			fileWritter = new FileWriter(file);
@@ -250,17 +259,17 @@ public static void main(String[] args){
 	classPathName.replaceAll("\\\\", "/");
 
 	String className = classPathName.substring(classPathName.lastIndexOf("/")+1); 
-	System.out.println(className);
+	
 	
 	String Path = classPathName.substring(0,classPathName.lastIndexOf("/"));
-	System.out.println(Path);
+	
 	
 	String ClassNameSlashes = className.replaceAll("\\.", "/");
-	System.out.println(ClassNameSlashes);
+	
 	File file = null;
 	try {
 		Class<?> givenClass = Class.forName(className);
-		System.out.println("Check"+givenClass.getCanonicalName());
+		
 		
 		file = new File(Path+"/"+ClassNameSlashes+"_stub.java");
 		String compileLocation = Path+"/"+ClassNameSlashes+"_stub.java";
@@ -275,19 +284,20 @@ public static void main(String[] args){
 		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.7.0_51");// For Windows if JAVA_HOME is not set 
 		JavaCompiler jCompiler = ToolProvider.getSystemJavaCompiler();
 		
-		System.out.println( jCompiler);
 		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 		
                 StandardJavaFileManager fileMngr = jCompiler.getStandardFileManager(null, null, null);
 		Boolean b = jCompiler.getTask(null, fileMngr, diagnostics, null, null, fileMngr.getJavaFileObjectsFromFiles(Arrays.asList(file))).call();
-		System.out.println(b);
+		if(b==true){
+			System.out.println("Stub created and compiled succesfully"); 
+		}
+		else{
+			System.out.println("Stub Creation/Compilation error");
+		}
 		
 	} catch (ClassNotFoundException e) {
 		e.printStackTrace();
 	}
-	
-	
-	
-	
+		
 }
 }

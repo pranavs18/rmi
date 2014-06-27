@@ -9,6 +9,7 @@ public class Message implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	/* The method information we are storing */
 	MessageType messageType = null;
 	String methodName = null;
 	Object[] arguments = new Object[]{};
@@ -20,7 +21,7 @@ public class Message implements Serializable {
 	String lookupName = null;
 	
 	
-
+/* All message information are stored as a constructor*/
 	public Message(MessageType messageType, String methodName,
 			Object[] arguments, Class<?>[] argTypes, Class<?> returnType, Object returnValue,
 			String exception,RemoteObjectRef ror, String lookupName) {
@@ -37,6 +38,8 @@ public class Message implements Serializable {
 	}
 
 
+	
+	/* getters for the message information */
 
 	public String getLookupName() {
 		return lookupName;

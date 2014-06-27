@@ -1,3 +1,9 @@
+/*
+ * Id: vsureshk, pranavsa
+ * Authors: Vaibhav Suresh Kumar & Pranav Saxena
+ */
+
+
 package generics;
 
 import java.io.IOException;
@@ -10,11 +16,14 @@ import java.net.Socket;
 import registry.RegistryInterface;
 import registry.Registry_stub;
 
+/* This class takes host and port creates a connection and sends the stub object */
+
 public class Communication {
 	
 	String host;
 	Integer port;
 	Object stubObject;
+	
 	
 	public Communication(String host, Integer port, Object stubObject){
 		

@@ -1,3 +1,9 @@
+/*
+ * Id: vsureshk, pranavsa
+ * Authors: Vaibhav Suresh Kumar & Pranav Saxena
+ */
+
+
 package Client;
 
 
@@ -68,7 +74,8 @@ public static void main(String[] args){
 		
 		
 		String ServerIp = args[0];		
-	
+		
+		
 		RMIClient4 client = new RMIClient4(ServerIp);
 		
 		// Starts worker host thread

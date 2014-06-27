@@ -1,3 +1,9 @@
+/*
+ * Id: vsureshk, pranavsa
+ * Authors: Vaibhav Suresh Kumar & Pranav Saxena
+ */
+
+
 package Server;
 
 
@@ -6,12 +12,7 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-
-
-
 import java.util.Map.Entry;
-
 import generics.Naming;
 import registry.AlreadyBoundException;
 import registry.NotBoundException;

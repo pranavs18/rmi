@@ -1,3 +1,8 @@
+/*
+ * Id: vsureshk, pranavsa
+ * Authors: Vaibhav Suresh Kumar & Pranav Saxena
+ */
+
 package Server;
 
 import java.util.HashMap;
@@ -16,7 +21,7 @@ public class MixBagTest implements MixbagTestInterface {
 
 	@Override
 	public void hello() {
-		System.out.println("Server Hit can computation done" );
+		System.out.println("Server Hit" );
 
 	}
 
