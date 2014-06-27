@@ -275,7 +275,7 @@ public static void main(String[] args){
 		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.7.0_51");// For Windows if JAVA_HOME is not set 
 		JavaCompiler jCompiler = ToolProvider.getSystemJavaCompiler();
 		
-		System.out.println("helooooooo" + jCompiler);
+		System.out.println( jCompiler);
 		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 		
                 StandardJavaFileManager fileMngr = jCompiler.getStandardFileManager(null, null, null);

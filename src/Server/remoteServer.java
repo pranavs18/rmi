@@ -25,7 +25,10 @@ public class remoteServer implements Runnable,Serializable{
 
 	public static void main(String args[]) throws IOException, NotBoundException{
 		
-	
+                if(args.length != 1){
+			System.out.println("Please enter the Arguments of the form - Registry_IP");
+						
+		}	
 		serverArithmetic serAr = new serverArithmetic();
 		ConcatenationImpl concat = new ConcatenationImpl();
 		FinalCompilerTest finalTest = new FinalCompilerTest();
@@ -33,11 +36,11 @@ public class remoteServer implements Runnable,Serializable{
 		findMaxElement max = new findMaxElement();
 		try {
 			
-		 Naming.bind("//128.2.13.133:1099/test1", serAr);
-		 Naming.rebind("//128.2.13.133:1099/test2", concat);
-		 Naming.rebind("//128.2.13.133:1099/finaltest", finalTest);
-		 Naming.rebind("//128.2.13.133:1099/mix", mix);
-		 Naming.rebind("//128.2.13.133:1099/max", max);
+		 Naming.bind("//"+args[0]+":1099/test1", serAr);
+		 Naming.rebind("//"+args[0]+":1099/test2", concat);
+		 Naming.rebind("//"+args[0]+":1099/finaltest", finalTest);
+		 Naming.rebind("//"+args[0]+":1099/mix", mix);
+		 Naming.rebind("//"+args[0]+":1099/max", max);
 		
 		} catch (AlreadyBoundException | RemoteException e) {
 			

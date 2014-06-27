@@ -18,7 +18,7 @@ public class Naming{
 		String ip = null;
 		try {
 			ip = InetAddress.getLocalHost().getHostAddress();
-                        System.out.println("IP ADDRESS PASSED - "+ ip);
+                        //System.out.println("IP ADDRESS PASSED - "+ ip);
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
@@ -71,7 +71,7 @@ public class Naming{
 		String ip = null;
 		try {
 			ip = InetAddress.getLocalHost().getHostAddress();
-                        System.out.println("IP ADDRESS PASSED " + ip);
+                       // System.out.println("IP ADDRESS PASSED " + ip);
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
