@@ -8,21 +8,20 @@ import java.net.UnknownHostException;
 
 public class rmiClient implements Runnable{
 
-	String ServerIp;
-	static int ServerPort = 9999;
-   public rmiClient(String ServerIp){
-		
-		this.ServerIp = ServerIp;
+   String serverIp;
+   static int ServerPort = 9999;
+   public rmiClient(String serverIp){
+           this.serverIp = serverIp;		
 				
 	}
    
-   public void startrmiClient(String ServerIp, int ServerPort) throws UnknownHostException, IOException, InterruptedException{
+   public void startrmiClient(String ServerIp) throws UnknownHostException, IOException, InterruptedException{
 
-	   serverArithmeticInterface remoteObject = (serverArithmeticInterface)Naming.lookUp("rmi://128.2.13.144:1099/test1");
+	   serverArithmeticInterface remoteObject = (serverArithmeticInterface)Naming.lookUp("rmi://"+ ServerIp +":1099/test1");
 	   int retVal = 0;
 	try {
 		retVal = remoteObject.divide(20, 0);
-		System.out.println("Division of 2 numbers : "+ retVal);
+		//System.out.println("Division of 2 numbers : "+ retVal);
 	} catch (Exception e) {
 		
 		e.printStackTrace();
@@ -56,7 +55,7 @@ public class rmiClient implements Runnable{
 	@Override
 	public void run() {
 		try {
-			startrmiClient(ServerIp,ServerPort);
+			startrmiClient(serverIp);
 		} catch (UnknownHostException e) {	
 			e.printStackTrace();
 		} catch (IOException e) {			
@@ -70,9 +69,11 @@ public class rmiClient implements Runnable{
 public static void main(String[] args){
 		
 		
-		String ServerIp = args[0];		
+            if(args.length != 1){
+                 System.out.println("Please enter the registry IP here");
+             }
 	
-		rmiClient client = new rmiClient(ServerIp);
+		rmiClient client = new rmiClient(args[0]);
 		
 		// Starts worker host thread
 		new Thread(client).start();
