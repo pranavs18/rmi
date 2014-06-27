@@ -20,8 +20,8 @@ public class rmiClient implements Runnable{
 	   serverArithmeticInterface remoteObject = (serverArithmeticInterface)Naming.lookUp("rmi://"+ ServerIp +":1099/test1");
 	   int retVal = 0;
 	try {
-		retVal = remoteObject.divide(20, 0);
-		//System.out.println("Division of 2 numbers : "+ retVal);
+		retVal = remoteObject.divide(20, 4);
+		System.out.println("Division of 2 numbers : "+ retVal);
 	} catch (Exception e) {
 		
 		e.printStackTrace();
