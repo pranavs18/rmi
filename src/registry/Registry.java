@@ -1,7 +1,7 @@
 package registry;
 import generics.Message;
 import generics.MessageType;
-
+import java.net.InetAddress;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -231,12 +231,12 @@ private void startRegistry(String host, int registryPort) throws IOException, Cl
 public static void main(String[] args) throws UnknownHostException{
 	
 	    	
-		if(args.length != 1){
-			System.out.println("Please enter the Arguments of the form - Registry_IP");
+	//	if(args.length != 1){
+		//	System.out.println("Please enter the Arguments of the form - Registry_IP");
 			
-		}
+	//	}
 		
-		String Registry_IP = args[0]; 
+		String Registry_IP = InetAddress.getLocalHost().getHostAddress(); 
 		Registry reg = new Registry(Registry_IP,registry_port);	
 		System.out.println("Starting registry on host " + Registry_IP + " and port " + registry_port);
 		
