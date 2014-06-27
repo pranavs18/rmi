@@ -24,7 +24,7 @@ public class RMIClient3 implements Runnable{
 	   public void startrmiClient(String ServerIp, int ServerPort) throws UnknownHostException, IOException, InterruptedException{
 
 		  
-		  MixbagTestInterface mix = (MixbagTestInterface)Naming.lookUp("//128.237.191.229:1099/mix");
+		  MixbagTestInterface mix = (MixbagTestInterface)Naming.lookUp("rmi://"+ServerIp+":1099/mix");
 		  
 		  mix.hello();
 		  Float result = mix.divide(100F, 2.0F, 3.0F);
