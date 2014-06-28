@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Map.Entry;
-
+import java.util.regex.Pattern;
 import registry.RemoteObjectRef;
 
 
@@ -69,15 +69,35 @@ public class RMIClient4 implements Runnable{
 		}
 		
 	}
+
+     public static boolean validateIP(String ip){
+
+                   final String IPV4_REGEX = "(([0-1]?[0-9]{1,2}\\.)|(2[0-4][0-9]\\.)|(25[0-5]\\.)){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))";
+                   Pattern IPV4_PATTERN = Pattern.compile(IPV4_REGEX);
+                   return IPV4_PATTERN.matcher(ip).matches();
+
+          }
+
 	
-public static void main(String[] args){
+     public static void main(String[] args){
 		
 		
-		String ServerIp = args[0];		
-		
-		
-		RMIClient4 client = new RMIClient4(ServerIp);
-		
+                 boolean ip = validateIP(args[0]);
+                RMIClient4 client = null;
+                if(args.length != 1){
+                System.out.println("Please enter the arguments of the form - java Client/RMIClient4 <Registry IP>");
+                System.exit(1);
+            }
+
+               if(ip){
+                  client = new RMIClient4(args[0]);
+               }
+
+               else{
+                      System.out.println("Invalid IP Address supplied...Please enter a valid IP address");
+                      System.exit(1);
+                   }
+	
 		// Starts worker host thread
 		new Thread(client).start();
 		
